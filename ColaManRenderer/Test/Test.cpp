@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "Actor/CameraActor.h"
+#include "Actor/StaticMeshActor.h"
 #include "Engine/Engine.h"
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -12,12 +13,29 @@ class CSampleWorld : public CWorld
 public:
     CSampleWorld()
     {
+        
+    }
+    
+    virtual void InitWorld(CEngine* engine) override
+    {
+        CWorld::InitWorld(engine);
         auto Camera = AddActor<CCameraActor>("Camera");
         CameraComponent = Camera->GetCameraComponent();
         CameraComponent->SetWorldLocation(SVector3(2.0f, 2.0f, -10.0f));
         CameraComponent->UpdateViewMatrix();
-    }
 
+        // Add CyborgWeapon
+        // {
+        //     auto CyborgWeapon = AddActor<CStaticMeshActor>("CyborgWeapon");
+        //     CyborgWeapon->SetMesh("CyborgWeapon");
+        //     CyborgWeapon->SetMaterialInstance("CyborgWeaponMatInst");
+        //     CTransform Transform;
+        //     Transform.Location = SVector3(-2.0f, 1.0f, -5.0f);
+        //     Transform.Rotation = SRotator(0.0f, 0.0f, -45.0f);
+        //     Transform.Scale = SVector3(300.0f, 300.0f, 300.0f);
+        //     CyborgWeapon->SetActorTransform(Transform);
+        // }
+    }
     ~CSampleWorld() override
     {
     }

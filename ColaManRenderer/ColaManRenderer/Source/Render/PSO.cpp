@@ -24,32 +24,32 @@ void CGraphicsPSOManager::CreatePSO(const SGraphicsPSODescriptor& descriptor)
         PsoDesc.pRootSignature = RootSignature.Get();
         PsoDesc.VS =
         {
-            reinterpret_cast<BYTE*>(Shader->ShaderPass.at("VS")->GetBufferPointer()
-                , Shader->ShaderPass.at("VS")->GetBufferSize())
+            reinterpret_cast<BYTE*>(Shader->ShaderPass.at("VS")->GetBufferPointer())
+                , Shader->ShaderPass.at("VS")->GetBufferSize()
         };
         PsoDesc.PS = {
-            reinterpret_cast<BYTE*>(Shader->ShaderPass.at("PS")->GetBufferPointer()
-                , Shader->ShaderPass.at("PS")->GetBufferSize())
+            reinterpret_cast<BYTE*>(Shader->ShaderPass.at("PS")->GetBufferPointer())
+                , Shader->ShaderPass.at("PS")->GetBufferSize()
         };
         if (Shader->ShaderInfo.bCreateDS)
         {
             PsoDesc.DS = {
-                reinterpret_cast<BYTE*>(Shader->ShaderPass.at("DS")->GetBufferPointer()
-                    , Shader->ShaderPass.at("DS")->GetBufferSize())
+                reinterpret_cast<BYTE*>(Shader->ShaderPass.at("DS")->GetBufferPointer())
+                    , Shader->ShaderPass.at("DS")->GetBufferSize()
             };
         }
         if (Shader->ShaderInfo.bCreateHS)
         {
             PsoDesc.HS = {
-                reinterpret_cast<BYTE*>(Shader->ShaderPass.at("HS")->GetBufferPointer()
-                    , Shader->ShaderPass.at("HS")->GetBufferSize())
+                reinterpret_cast<BYTE*>(Shader->ShaderPass.at("HS")->GetBufferPointer())
+                    , Shader->ShaderPass.at("HS")->GetBufferSize()
             };
         }
         if (Shader->ShaderInfo.bCreateGS)
         {
             PsoDesc.GS = {
-                reinterpret_cast<BYTE*>(Shader->ShaderPass.at("GS")->GetBufferPointer()
-                    , Shader->ShaderPass.at("GS")->GetBufferSize())
+                reinterpret_cast<BYTE*>(Shader->ShaderPass.at("GS")->GetBufferPointer())
+                    , Shader->ShaderPass.at("GS")->GetBufferSize()
             };
         }
 

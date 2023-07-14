@@ -224,7 +224,7 @@ private:
 
     CD3D12ConstantBufferRef ShadowPassCBRef = nullptr;
 
-    CD3D12ConstantBufferRef BasePasCBRef = nullptr;
+    CD3D12ConstantBufferRef BasePassCBRef = nullptr;
 
     CD3D12ConstantBufferRef SSAOPassCBRef = nullptr;
 

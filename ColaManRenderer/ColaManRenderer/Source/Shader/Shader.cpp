@@ -49,7 +49,7 @@ void SShaderDefines::SetDefine(const std::string& name, const std::string& defin
     DefinesMap.insert_or_assign(name, definition);
 }
 
-CShader::CShader(const SShaderInfo& shaderInfo, CD3D12RHI* d3d12RHI)
+CShader::CShader(const SShaderInfo& shaderInfo, CD3D12RHI* d3d12RHI):ShaderInfo(shaderInfo),D3D12RHI(d3d12RHI)
 {
     Initialize();
 
@@ -535,7 +535,7 @@ void CShader::GetShaderParameters(Microsoft::WRL::ComPtr<ID3DBlob> passBlob, ESh
     for (UINT i = 0; i < shaderDesc.BoundResources; i++)
     {
         D3D12_SHADER_INPUT_BIND_DESC resourceDesc;
-        reflection->GetResourceBindingDesc(1, &resourceDesc);
+        reflection->GetResourceBindingDesc(i, &resourceDesc);
 
         auto shaderVarName = resourceDesc.Name;
         auto resourceType = resourceDesc.Type;

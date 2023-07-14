@@ -287,6 +287,9 @@ bool CEngine::InitMainWindow()
 
 void CEngine::OnResize()
 {
+    if (Render->IsInitialize()) {
+        Render->OnResize(WindowWidth, WindowHeight);
+    }	
 }
 
 void CEngine::CalculateFrameStats()

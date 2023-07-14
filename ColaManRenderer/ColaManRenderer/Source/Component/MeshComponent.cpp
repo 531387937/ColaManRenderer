@@ -1,5 +1,6 @@
 ﻿#include "MeshComponent.h"
 
+#include "Material/MaterialRepository.h"
 #include "Mesh/Mesh.h"
 #include "Mesh/MeshRepository.h"
 
@@ -44,7 +45,7 @@ bool CMeshComponent::GetWorldBoundingBox(CBoundingBox& box)
 void CMeshComponent::SetMaterialInstance(std::string MaterialInstanceName)
 {
     //TODO
-    //MaterialInstance = TMaterialRepository::Get().GetMaterialInstance(MaterialInstanceName);
+    MaterialInstance = CMaterialRepository::Get().GetMaterialInstance(MaterialInstanceName);
 
     assert(MaterialInstance); //TODO
 }

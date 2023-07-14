@@ -43,6 +43,7 @@ void CWorld::Update(const GameTimer& gt)
         static float TimeElapsed = 0.0f;
         FrameCnt++;
 
+        DrawTriangle({0,0,0},{0,1,0},{1,1,0},SColor::Red);
         // Compute averages over one second period.
         if ((gt.TotalTime() - TimeElapsed) >= 1.0f)
         {
