@@ -1,6 +1,6 @@
 ﻿#include "SpotLightActor.h"
 
-CSpotLightActor::CSpotLightActor(const std::string& Name):CLightActor(Name,ELightType::SpotLight)
+CSpotLightActor::CSpotLightActor(const std::string& Name): CLightActor(Name, ELightType::SpotLight)
 {
     MeshComponent = AddComponent<CMeshComponent>();
 
@@ -31,27 +31,27 @@ SVector3 CSpotLightActor::GetLightDirection()
 
 void CSpotLightActor::UpdateShadowData(CD3D12RHI* d3d12RHI, EShadowMapImpl smImpl)
 {
-    if(ShadowMap==nullptr)
+    if (ShadowMap == nullptr)
     {
         const UINT ShadowSize = 1024;
-        ShadowMap = std::make_unique<CShadowMap2D>(ShadowSize,ShadowSize,DXGI_FORMAT_R24G8_TYPELESS,d3d12RHI);
-        
+        ShadowMap = std::make_unique<CShadowMap2D>(ShadowSize, ShadowSize, DXGI_FORMAT_R24G8_TYPELESS, d3d12RHI);
     }
 
     SVector3 LightPos = GetActorLocation();
-    SVector3 TargetPos = LightPos+GetLightDirection();
+    SVector3 TargetPos = LightPos + GetLightDirection();
     SVector3 LightUp = SVector3::Up;
 
-    float fov = OuterConeAngle*2.0f*(CMath::Pi/180.0f);
+    float fov = OuterConeAngle * 2.0f * (CMath::Pi / 180.0f);
     float aspectRation = 1.0f;
     float Near = 0.1f;
     float Far = AttenuationRange;
 
-    ShadowMap->CreatePerspectiveView(LightPos,TargetPos,LightUp,fov,aspectRation,Near,Far);
+    ShadowMap->CreatePerspectiveView(LightPos, TargetPos, LightUp, fov, aspectRation, Near, Far);
 }
 
 void CSpotLightActor::SetLightDirection(SRotator rotation)
 {
-    SMatrix r = SMatrix::CreateFromYawPitchRoll(rotation.Yaw*CMath::Pi/180.0f,rotation.Pitch*CMath::Pi/180.0f,rotation.Roll*CMath::Pi/180.0f);
+    SMatrix r = SMatrix::CreateFromYawPitchRoll(rotation.Yaw * CMath::Pi / 180.0f, rotation.Pitch * CMath::Pi / 180.0f,
+                                                rotation.Roll * CMath::Pi / 180.0f);
     Direction = r.TransformNormal(SVector3::Up);
 }

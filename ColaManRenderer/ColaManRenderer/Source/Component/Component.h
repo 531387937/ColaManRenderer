@@ -1,11 +1,16 @@
 ﻿#pragma once
 #include "Math/Transform.h"
+
 class CComponent
 {
 public:
-    CComponent(){}
+    CComponent()
+    {
+    }
 
-    virtual ~CComponent(){}
+    virtual ~CComponent()
+    {
+    }
 
 public:
     virtual void SetWorldLocation(const SVector3& Location)

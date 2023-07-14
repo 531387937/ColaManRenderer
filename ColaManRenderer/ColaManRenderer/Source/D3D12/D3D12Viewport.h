@@ -46,7 +46,6 @@ private:
     void CreateSwapChain();
 
 private:
-
     CD3D12RHI* D3D12RHI = nullptr;
 
     SD3D12ViewportInfo ViewportInfo;

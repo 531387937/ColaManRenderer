@@ -7,7 +7,11 @@
 struct SBVHPrimitiveInfo
 {
 public:
-    SBVHPrimitiveInfo(size_t primitiveIdx, CBoundingBox bounds):PrimitiveIdx(primitiveIdx),Bounds(bounds),Centroid(bounds.GetCenter()){}
+    SBVHPrimitiveInfo(size_t primitiveIdx, CBoundingBox bounds): PrimitiveIdx(primitiveIdx), Bounds(bounds),
+                                                                 Centroid(bounds.GetCenter())
+    {
+    }
+
 public:
     size_t PrimitiveIdx = 0;
 
@@ -18,22 +22,23 @@ public:
 
 struct SBVHBuildNode
 {
-    void InitLeaf(int first,int count,const CBoundingBox& bounds)
+    void InitLeaf(int first, int count, const CBoundingBox& bounds)
     {
         Bounds = bounds;
         FirstPrimOffset = first;
         PrimitiveCount = count;
     }
 
-    void InitInterior(int axis,std::unique_ptr<SBVHBuildNode>& left, std::unique_ptr<SBVHBuildNode>& right)
+    void InitInterior(int axis, std::unique_ptr<SBVHBuildNode>& left, std::unique_ptr<SBVHBuildNode>& right)
     {
-        Bounds = CBoundingBox::Union(left->Bounds,right->Bounds);
+        Bounds = CBoundingBox::Union(left->Bounds, right->Bounds);
         SplitAxis = axis;
         LeftChild = std::move(left);
         RightChild = std::move(right);
     }
 
-    bool IsLeafNode(){return PrimitiveCount>0;}
+    bool IsLeafNode() { return PrimitiveCount > 0; }
+
 public:
     CBoundingBox Bounds;
 
@@ -57,7 +62,8 @@ struct SBVHBucketInfo
 
 struct SBVHLinearNode
 {
-    bool IsLeafNode() { return PrimitiveCount>0;}
+    bool IsLeafNode() { return PrimitiveCount > 0; }
+
 public:
     CBoundingBox Bounds;
 
@@ -89,26 +95,31 @@ public:
     void DebugFlattenBVH(CWorld* world);
 
 private:
-    std::unique_ptr<SBVHBuildNode> RecursiveBuild(std::vector<SBVHPrimitiveInfo>& primitiveInfoList,int _start,int _end,int& outTotalNodes,
-        std::vector<CMeshComponent*> orderedPrimitives);
+    std::unique_ptr<SBVHBuildNode> RecursiveBuild(std::vector<SBVHPrimitiveInfo>& primitiveInfoList, int _start,
+                                                  int _end, int& outTotalNodes,
+                                                  std::vector<CMeshComponent*> orderedPrimitives);
 
-    int PartitionMiddleMethod(const CBoundingBox& centroidBounds,int splitAxis,std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
-        int _start,int _end);
+    int PartitionMiddleMethod(const CBoundingBox& centroidBounds, int splitAxis,
+                              std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
+                              int _start, int _end);
 
-    int PartitionEqualCountsMethod(const CBoundingBox& centroidBounds,int splitAxis,std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
-        int _start,int _end);
+    int PartitionEqualCountsMethod(const CBoundingBox& centroidBounds, int splitAxis,
+                                   std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
+                                   int _start, int _end);
 
-    int PartitionSAHMethod(const CBoundingBox& bounds,const CBoundingBox& centroidBounds,int splitAxis,std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
-        int _start,int _end,float& outCost);
+    int PartitionSAHMethod(const CBoundingBox& bounds, const CBoundingBox& centroidBounds, int splitAxis,
+                           std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
+                           int _start, int _end, float& outCost);
 
-    void CreateLeafNode(std::unique_ptr<SBVHBuildNode>& outLeftNode,const CBoundingBox& Bounds, std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
-        int _start, int _end, std::vector<CMeshComponent*>& orderedPrimitives);
+    void CreateLeafNode(std::unique_ptr<SBVHBuildNode>& outLeftNode, const CBoundingBox& Bounds,
+                        std::vector<SBVHPrimitiveInfo>& primitiveInfoList,
+                        int _start, int _end, std::vector<CMeshComponent*>& orderedPrimitives);
 
-    int FlattenBVHTree(std::unique_ptr<SBVHBuildNode>& node,int& offset);
+    int FlattenBVHTree(std::unique_ptr<SBVHBuildNode>& node, int& offset);
 
     SColor MapDepthToColor(int depth);
 
-    void DebugBuildNode(CWorld* world,SBVHBuildNode* node, int depth);
+    void DebugBuildNode(CWorld* world, SBVHBuildNode* node, int depth);
 
 private:
     EsplitMethod SplitMethod = EsplitMethod::SAH;

@@ -21,12 +21,12 @@ struct SShaderDefines
 public:
     void GetD3DShaderMacro(std::vector<D3D_SHADER_MACRO>& OutMacros) const;
 
-    bool operator == (const SShaderDefines& other) const;
+    bool operator ==(const SShaderDefines& other) const;
 
     void SetDefine(const std::string& name, const std::string& definition);
 
 public:
-    std::unordered_map<std::string,std::string> DefinesMap;
+    std::unordered_map<std::string, std::string> DefinesMap;
 };
 
 // declare hash<TShaderDefines>
@@ -64,28 +64,27 @@ struct SShaderParameter
     UINT RegisterSpace;
 };
 
-struct SShaderCBVParameter:SShaderParameter
+struct SShaderCBVParameter : SShaderParameter
 {
     CD3D12ConstantBufferRef ConstantBufferRef;
 };
 
-struct SShaderSRVParameter:SShaderParameter
+struct SShaderSRVParameter : SShaderParameter
 {
     UINT BindCount;
 
     std::vector<CD3D12ShaderResourceView*> SRVList;
 };
 
-struct SShaderUAVParameter:SShaderParameter
+struct SShaderUAVParameter : SShaderParameter
 {
     UINT BindCount;
 
     std::vector<CD3D12UnorderedAccessView*> UAVList;
 };
 
-struct SShaderSamplerParameter:SShaderParameter
+struct SShaderSamplerParameter : SShaderParameter
 {
-    
 };
 
 struct SShaderInfo
@@ -99,9 +98,9 @@ struct SShaderInfo
     bool bCreateVS = false;
 
     std::string VSEntryPoint = "VS";
-    
+
     bool bCreateHS = false;
-    
+
     std::string HSEntryPoint = "HS";
 
     bool bCreateDS = false;
@@ -141,8 +140,9 @@ public:
     void BindParameters();
 
 private:
-    static Microsoft::WRL::ComPtr<ID3DBlob> CompileShader(const std::wstring& Filename, const D3D_SHADER_MACRO* Defines, const std::string& Entrypoint, const std::string& Target);
-    
+    static Microsoft::WRL::ComPtr<ID3DBlob> CompileShader(const std::wstring& Filename, const D3D_SHADER_MACRO* Defines,
+                                                          const std::string& Entrypoint, const std::string& Target);
+
     void GetShaderParameters(Microsoft::WRL::ComPtr<ID3DBlob> passBlob, EShaderType shaderType);
 
     D3D12_SHADER_VISIBILITY GetShaderVisibility(EShaderType shaderType);
@@ -164,7 +164,7 @@ public:
 
     std::vector<SShaderUAVParameter> UAVParams;
 
-    std::vector<SShaderSamplerParameter>  SamplerParams;
+    std::vector<SShaderSamplerParameter> SamplerParams;
 
     int CBVSignatureBaseBindSlot = -1;
 

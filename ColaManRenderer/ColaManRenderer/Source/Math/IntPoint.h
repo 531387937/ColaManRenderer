@@ -6,47 +6,57 @@
 // 32 bit signed integer components
 struct IntPoint : public DirectX::XMINT2
 {
-	IntPoint() noexcept : DirectX::XMINT2(0, 0) {}
-	constexpr explicit IntPoint(int32_t ix, int32_t iy) noexcept : DirectX::XMINT2(ix, iy) {}
+    IntPoint() noexcept : XMINT2(0, 0)
+    {
+    }
 
-	IntPoint(const IntPoint&) = default;
-	IntPoint& operator=(const IntPoint&) = default;
+    constexpr explicit IntPoint(int32_t ix, int32_t iy) noexcept : XMINT2(ix, iy)
+    {
+    }
 
-	IntPoint(IntPoint&&) = default;
-	IntPoint& operator=(IntPoint&&) = default;
+    IntPoint(const IntPoint&) = default;
+    IntPoint& operator=(const IntPoint&) = default;
+
+    IntPoint(IntPoint&&) = default;
+    IntPoint& operator=(IntPoint&&) = default;
 };
 
 // 2D Vector
 // 32 bit unsigned integer components
 struct UIntPoint : public DirectX::XMUINT2
 {
-	UIntPoint() noexcept : DirectX::XMUINT2(0, 0) {}
-	constexpr explicit UIntPoint(uint32_t ix, uint32_t iy) noexcept : DirectX::XMUINT2(ix, iy) {}
+    UIntPoint() noexcept : XMUINT2(0, 0)
+    {
+    }
 
-	UIntPoint(const UIntPoint&) = default;
-	UIntPoint& operator=(const UIntPoint&) = default;
+    constexpr explicit UIntPoint(uint32_t ix, uint32_t iy) noexcept : XMUINT2(ix, iy)
+    {
+    }
 
-	UIntPoint(UIntPoint&&) = default;
-	UIntPoint& operator=(UIntPoint&&) = default;
+    UIntPoint(const UIntPoint&) = default;
+    UIntPoint& operator=(const UIntPoint&) = default;
+
+    UIntPoint(UIntPoint&&) = default;
+    UIntPoint& operator=(UIntPoint&&) = default;
 };
 
-inline UIntPoint operator* (const UIntPoint& U, float S) noexcept
+inline UIntPoint operator*(const UIntPoint& U, float S) noexcept
 {
-	using namespace DirectX;
-	XMVECTOR v1 = XMLoadUInt2(&U);
-	XMVECTOR X = XMVectorScale(v1, S);
-	UIntPoint R;
-	XMStoreUInt2(&R, X);
-	return R;
+    using namespace DirectX;
+    XMVECTOR v1 = XMLoadUInt2(&U);
+    XMVECTOR X = XMVectorScale(v1, S);
+    UIntPoint R;
+    XMStoreUInt2(&R, X);
+    return R;
 }
 
-inline UIntPoint operator+ (const UIntPoint& U1, const UIntPoint& U2) noexcept
+inline UIntPoint operator+(const UIntPoint& U1, const UIntPoint& U2) noexcept
 {
-	using namespace DirectX;
-	XMVECTOR v1 = XMLoadUInt2(&U1);
-	XMVECTOR v2 = XMLoadUInt2(&U2);
-	XMVECTOR X = XMVectorAdd(v1, v2);
-	UIntPoint R;
-	XMStoreUInt2(&R, X);
-	return R;
+    using namespace DirectX;
+    XMVECTOR v1 = XMLoadUInt2(&U1);
+    XMVECTOR v2 = XMLoadUInt2(&U2);
+    XMVECTOR X = XMVectorAdd(v1, v2);
+    UIntPoint R;
+    XMStoreUInt2(&R, X);
+    return R;
 }

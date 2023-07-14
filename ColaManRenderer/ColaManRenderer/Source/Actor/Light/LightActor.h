@@ -12,12 +12,12 @@ enum class ELightType
     AreaLight
 };
 
-class CLightActor:public CActor
+class CLightActor : public CActor
 {
 public:
-    CLightActor(const std::string& Name,ELightType type);
+    CLightActor(const std::string& Name, ELightType type);
 
-    ~CLightActor();
+    ~CLightActor() override;
 
     ELightType GetType()
     {
@@ -64,7 +64,9 @@ public:
         bDrawDebug = bDraw;
     }
 
-    virtual void UpdateShadowInfo(CShadowMap2D* ShadowMap){}
+    virtual void UpdateShadowInfo(CShadowMap2D* ShadowMap)
+    {
+    }
 
 protected:
     ELightType Type = ELightType::None;

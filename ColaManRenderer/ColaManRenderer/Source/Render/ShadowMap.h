@@ -15,14 +15,14 @@ enum class EShadowMapImpl
     SDF
 };
 
-class CShadowMap2D:public CSceneCapture2D
+class CShadowMap2D : public CSceneCapture2D
 {
 public:
-    CShadowMap2D(UINT width,UINT height,DXGI_FORMAT format,CD3D12RHI* d3d12RHI);
+    CShadowMap2D(UINT width, UINT height, DXGI_FORMAT format, CD3D12RHI* d3d12RHI);
 };
 
-class CShadowMapCube:public CSceneCaptureCube
+class CShadowMapCube : public CSceneCaptureCube
 {
 public:
-    CShadowMapCube(UINT size,DXGI_FORMAT format,CD3D12RHI* d3d12RHI);
+    CShadowMapCube(UINT size, DXGI_FORMAT format, CD3D12RHI* d3d12RHI);
 };

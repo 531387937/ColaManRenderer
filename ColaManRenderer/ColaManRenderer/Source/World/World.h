@@ -4,15 +4,19 @@
 
 #include "Actor/Actor.h"
 #include "Component/CameraComponent.h"
-#include "Engine/Engine.h"
+#include "Engine/GameTimer.h"
+
 #include "Mesh/Primitive.h"
+class CEngine;
 
 class CWorld
 {
 public:
     CWorld();
 
-    virtual ~CWorld(){}
+    virtual ~CWorld()
+    {
+    }
 
     virtual void InitWorld(CEngine* engine);
 
@@ -24,8 +28,8 @@ private:
     void SavePreFrameData();
 
 public:
-    virtual void OnMouseDown(WPARAM btnState,int x,int y);
-    
+    virtual void OnMouseDown(WPARAM btnState, int x, int y);
+
     virtual void OnMouseUp(WPARAM btnState, int x, int y);
 
     virtual void OnMouseMove(WPARAM btnState, int x, int y);
@@ -34,8 +38,8 @@ public:
 
     virtual void OnKeyboardInput(const GameTimer& gt);
 
-    template<typename T>
-    T* AddActor(const std::string& Name)
+    template <typename T>
+    T* AddActor(const std::string& name)
     {
         auto newActor = std::make_unique<T>(name);
         T* Result = newActor.get();
@@ -47,7 +51,7 @@ public:
     std::vector<CActor*> GetActors()
     {
         std::vector<CActor*> Result;
-        for(const auto& actor:Actors)
+        for (const auto& actor : Actors)
         {
             Result.push_back(actor.get());
         }
@@ -55,14 +59,14 @@ public:
         return Result;
     }
 
-    template<typename T>
+    template <typename T>
     std::vector<T*> GetAllActorsOfClass()
     {
         std::vector<T*> result;
-        for(const auto& actor:Actors)
+        for (const auto& actor : Actors)
         {
             T* actorofClass = dynamic_cast<T*>(actor.get());
-            if(actorofClass)
+            if (actorofClass)
             {
                 result.push_back(actorofClass);
             }
@@ -70,16 +74,16 @@ public:
         return result;
     }
 
-    CCameraComponent* GetCameraComponent() {return CameraComponent;}
+    CCameraComponent* GetCameraComponent() { return CameraComponent; }
 
 public:
-    void DrawPoint(const SVector3& point,const SColor& Color,int size = 0);
+    void DrawPoint(const SVector3& point, const SColor& Color, int size = 0);
 
     void DrawPoint(const CPoint& point);
 
     const std::vector<CPoint>& GetPoints();
 
-    void DrawLine(const SVector3& pointA,const SVector3& pointB,const SColor& color);
+    void DrawLine(const SVector3& pointA, const SVector3& pointB, const SColor& color);
 
     void DrawLine(const CLine& line);
 
@@ -87,7 +91,8 @@ public:
 
     void DrawBox3D(const SVector3& MinPointInWorld, const SVector3& MaxPointInWorld, const SColor& Color);
 
-    void DrawTriangle(const SVector3& PointAInWorld, const SVector3& PointBInWorld, const SVector3& PointCInWorld, const SColor& Color);
+    void DrawTriangle(const SVector3& PointAInWorld, const SVector3& PointBInWorld, const SVector3& PointCInWorld,
+                      const SColor& Color);
 
     void DrawTriangle(const CTriangle& Triangle);
 
@@ -95,11 +100,11 @@ public:
 
     //void DrawSprite(const std::string& TextureName, const UIntPoint& TextureSize, const RECT& SourceRect, const RECT& DestRect);
 
-   // const std::vector<TSprite>& GetSprites();
+    // const std::vector<TSprite>& GetSprites();
 
-   // void DrawString(int ID, std::string Str, float Duration = 1.0f);
+    // void DrawString(int ID, std::string Str, float Duration = 1.0f);
 
-   // void GetTexts(std::vector<TText>& OutTexts);
+    // void GetTexts(std::vector<TText>& OutTexts);
 protected:
     std::vector<std::unique_ptr<CActor>> Actors;
 
@@ -112,7 +117,7 @@ protected:
 protected:
     CEngine* Engine = nullptr;
 
-    HWND  MainWindowHandle = nullptr; // main window handle
+    HWND MainWindowHandle = nullptr; // main window handle
 
     CCameraComponent* CameraComponent = nullptr;
 

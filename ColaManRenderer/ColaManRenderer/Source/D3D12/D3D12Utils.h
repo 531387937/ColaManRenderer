@@ -1,15 +1,19 @@
 #pragma once
 
-#include "d3d12.h"
+#include "d3dx12.h"
+#include <dxgi1_4.h>
+#include <dxgidebug.h>
+#include <comdef.h>
 #include <windows.h>
 #include <wrl.h>
-#include "d3dx12.h"
+#include <d3d12.h>
+#include <D3Dcompiler.h>
+#include <DirectXPackedVector.h>
+#include <DirectXColors.h>
+#include <DirectXCollision.h>
 #include <memory>
 #include "Utils/FormatConvert.h"
 #include "Math/Math.h"
-#include "vector"
-#include "dxgi.h"
-#include "dxgi1_4.h"
 
 
 class DxException
@@ -18,7 +22,7 @@ public:
     DxException() = default;
     DxException(HRESULT hr, const std::wstring& functionName, const std::wstring& filename, int lineNumber);
 
-    std::wstring ToString()const;
+    std::wstring ToString() const;
 
     HRESULT ErrorCode = S_OK;
     std::wstring FunctionName;
@@ -39,8 +43,8 @@ if(FAILED(hr__)) { throw DxException(hr__, L#x, wfn, __LINE__); } \
 #define ReleaseCom(x) { if(x){ x->Release(); x = 0; } }
 #endif
 
-template<UINT TNameLength>
-inline void SetDebugName(_In_ ID3D12DeviceChild* resource, _In_z_ const wchar_t(&name)[TNameLength]) noexcept
+template <UINT TNameLength>
+void SetDebugName(_In_ ID3D12DeviceChild* resource, _In_z_ const wchar_t (&name)[TNameLength]) noexcept
 {
 #if !defined(NO_D3D12_DEBUG_NAME) && (defined(_DEBUG) || defined(PROFILE))
     resource->SetName(name);
@@ -60,5 +64,5 @@ inline uint32_t AlignArbitrary(uint32_t Val, uint32_t Alignment)
 inline UIntPoint GetTextureSize(ID3D12Resource* Texture)
 {
     const auto Desc = Texture->GetDesc();
-    return UIntPoint(static_cast<uint32_t>(Desc.Width), static_cast<uint32_t>(Desc.Height));
+    return UIntPoint(static_cast<uint32_t>(Desc.Width), Desc.Height);
 }

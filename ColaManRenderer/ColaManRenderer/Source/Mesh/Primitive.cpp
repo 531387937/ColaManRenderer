@@ -4,32 +4,26 @@
 
 bool CPrimitive::GetLocalBoundingBox(CBoundingBox& box) const
 {
-    if(BoundingBox.bInit)
+    if (BoundingBox.bInit)
     {
         box = BoundingBox;
 
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 bool CPrimitive::GetWorldBoundingBox(CBoundingBox& box) const
 {
     CBoundingBox localBox;
 
-    if(GetLocalBoundingBox(localBox))
+    if (GetLocalBoundingBox(localBox))
     {
         box = localBox.Transform(WorldTransform);
 
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 void CLine::GenerateBoundingBox()
@@ -57,24 +51,24 @@ bool CTriangle::Intersect(const CRay& ray, float& dist, bool& bBackFace)
 
     SVector3 dir = ray.Direction;
     SVector3 orig = ray.Origin;
-    SVector3 edge1 = PointB-PointA;
-    SVector3 edge2 = PointC-PointA;
+    SVector3 edge1 = PointB - PointA;
+    SVector3 edge2 = PointC - PointA;
 
     SVector3 pVec = dir.Cross(edge2);
 
     float det = edge1.Dot(pVec);
 
-    if(det>-EPSILON&&det<EPSILON)
+    if (det > -EPSILON && det < EPSILON)
     {
         return false;
     }
 
-    float invDet = 1.0f/det;
+    float invDet = 1.0f / det;
 
-    SVector3 tVec = orig-PointA;
+    SVector3 tVec = orig - PointA;
 
-    float u = tVec.Dot(pVec)*invDet;
-    if(u<0.0f||u>1.0f)
+    float u = tVec.Dot(pVec) * invDet;
+    if (u < 0.0f || u > 1.0f)
     {
         return false;
     }
@@ -98,7 +92,7 @@ bool CTriangle::Intersect(const CRay& ray, float& dist, bool& bBackFace)
     }
 
     float TValue = std::abs(t);
-    if(TValue > ray.MaxDist)
+    if (TValue > ray.MaxDist)
     {
         return false;
     }

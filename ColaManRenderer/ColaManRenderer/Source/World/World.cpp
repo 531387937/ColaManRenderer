@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "Engine/Engine.h"
+
 CWorld::CWorld()
 {
 }
@@ -15,14 +17,11 @@ void CWorld::InitWorld(CEngine* engine)
 
 std::string GetToggleStateStr(bool enable)
 {
-    if(enable)
+    if (enable)
     {
         return "ON";
     }
-    else
-    {
-        return "OFF";
-    }
+    return "OFF";
 }
 
 void CWorld::Update(const GameTimer& gt)
@@ -47,7 +46,7 @@ void CWorld::Update(const GameTimer& gt)
         // Compute averages over one second period.
         if ((gt.TotalTime() - TimeElapsed) >= 1.0f)
         {
-            FPS = (float)FrameCnt;
+            FPS = static_cast<float>(FrameCnt);
             MSPF = 1000.0f / FPS;
 
             // Reset for next average.
@@ -58,7 +57,7 @@ void CWorld::Update(const GameTimer& gt)
         //DrawString(1, "FPS: " + std::to_string(FPS), 0.1f);
         //DrawString(2, "MSPF: " + std::to_string(MSPF), 0.1f);
 
-        const TRenderSettings& RenderSettings = Engine->GetRender()->GetRenderSettings();
+        const SRenderSettings& RenderSettings = Engine->GetRender()->GetRenderSettings();
 
         // DrawString(3, "Hint: ", 0.1f);
         // DrawString(4, std::string("      Press H to toggle TAA [") + GetToggleStateStr(RenderSettings.bEnableTAA) +"]", 0.1f);
@@ -83,15 +82,13 @@ void CWorld::EndFrame(const GameTimer& gt)
     Lines.clear();
 
     Triangles.clear();
-
-    
 }
 
 void CWorld::SavePreFrameData()
 {
-    for(auto& actor:Actors)
+    for (auto& actor : Actors)
     {
-        if(actor->GetRootComponent())
+        if (actor->GetRootComponent())
         {
             actor->SaveActorPreTransform();
         }
@@ -99,7 +96,7 @@ void CWorld::SavePreFrameData()
 
     SMatrix view = CameraComponent->GetView();
     SMatrix proj = CameraComponent->GetProj();
-    SMatrix viewProj = view*proj;
+    SMatrix viewProj = view * proj;
     CameraComponent->SetPrevViewProj(viewProj);
 }
 
@@ -127,7 +124,7 @@ void CWorld::OnMouseMove(WPARAM btnState, int x, int y)
         float dx = 0.25f * static_cast<float>(x - LastMousePos.x);
         float dy = 0.25f * static_cast<float>(y - LastMousePos.y);
 
-        CameraComponent->Pitch(dy);  
+        CameraComponent->Pitch(dy);
         CameraComponent->RotateY(dx);
     }
 
@@ -137,7 +134,7 @@ void CWorld::OnMouseMove(WPARAM btnState, int x, int y)
 
 void CWorld::OnMouseWheel(float WheelDistance)
 {
-    MoveSpeed += (WheelDistance / WHEEL_DELTA); 
+    MoveSpeed += (WheelDistance / WHEEL_DELTA);
 
     MoveSpeed = std::clamp(MoveSpeed, 1.0f, 10.0f);
 }
@@ -213,7 +210,7 @@ void CWorld::OnKeyboardInput(const GameTimer& gt)
         if (!bKey_L_Pressed)
         {
             bKey_L_Pressed = true;
-            Engine->GetRender()->ToggleDebugSDF();
+            //Engine->GetRender()->ToggleDebugSDF();
         }
     }
     else
@@ -224,9 +221,9 @@ void CWorld::OnKeyboardInput(const GameTimer& gt)
 
 void CWorld::DrawPoint(const SVector3& point, const SColor& Color, int size)
 {
-    Points.emplace_back(point,Color);
+    Points.emplace_back(point, Color);
 
-    if(size!=0)
+    if (size != 0)
     {
         float Offset = 0.01f * size;
 
@@ -251,7 +248,7 @@ const std::vector<CPoint>& CWorld::GetPoints()
 
 void CWorld::DrawLine(const SVector3& pointA, const SVector3& pointB, const SColor& color)
 {
-    Lines.emplace_back(pointA,pointB,color);
+    Lines.emplace_back(pointA, pointB, color);
 }
 
 void CWorld::DrawLine(const CLine& line)
@@ -282,13 +279,13 @@ void CWorld::DrawBox3D(const SVector3& MinPointInWorld, const SVector3& MaxPoint
     DrawLine(SVector3(Min.x, Min.y, Min.z), SVector3(Min.x, Max.y, Min.z), Color);
     DrawLine(SVector3(Max.x, Min.y, Min.z), SVector3(Max.x, Max.y, Min.z), Color);
     DrawLine(SVector3(Min.x, Min.y, Max.z), SVector3(Min.x, Max.y, Max.z), Color);
-    DrawLine(SVector3(Max.x, Min.y, Max.z), SVector3(Max.x, Max.y, Max.z), Color);   
+    DrawLine(SVector3(Max.x, Min.y, Max.z), SVector3(Max.x, Max.y, Max.z), Color);
 }
 
 void CWorld::DrawTriangle(const SVector3& PointAInWorld, const SVector3& PointBInWorld, const SVector3& PointCInWorld,
-    const SColor& Color)
+                          const SColor& Color)
 {
-    Triangles.emplace_back(PointAInWorld,PointBInWorld,PointCInWorld,Color);
+    Triangles.emplace_back(PointAInWorld, PointBInWorld, PointCInWorld, Color);
 }
 
 void CWorld::DrawTriangle(const CTriangle& Triangle)

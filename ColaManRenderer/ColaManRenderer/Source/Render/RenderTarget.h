@@ -4,20 +4,20 @@
 class CRenderTarget
 {
 public:
-
-    CRenderTarget(CD3D12RHI* InD3D12RHI, bool RenderDepth, UINT InWidth, UINT InHeight, DXGI_FORMAT InFormat, SVector4 InClearValue = SVector4::Zero);
+    CRenderTarget(CD3D12RHI* InD3D12RHI, bool RenderDepth, UINT InWidth, UINT InHeight, DXGI_FORMAT InFormat,
+                  SVector4 InClearValue = SVector4::Zero);
 
     virtual ~CRenderTarget();
-    
-    CD3D12TextureRef GetTexture() const {return D3DTexture;}
 
-    CD3D12Resource* GetResource() const {return D3DTexture->GetResource();}
+    CD3D12TextureRef GetTexture() const { return D3DTexture; }
 
-    DXGI_FORMAT GetFormat() const {return Format;}
+    CD3D12Resource* GetResource() const { return D3DTexture->GetResource(); }
 
-    SVector4 GetClearColor() const {return ClearColor;}
+    DXGI_FORMAT GetFormat() const { return Format; }
 
-    float* GetClearColorPtr() {return (float*)&ClearColor;}
+    SVector4 GetClearColor() const { return ClearColor; }
+
+    float* GetClearColorPtr() { return (float*)&ClearColor; }
 
 protected:
     bool isDepthStencil = false;
@@ -35,10 +35,11 @@ protected:
     SVector4 ClearColor;
 };
 
-class CRenderTarget2D:public CRenderTarget
+class CRenderTarget2D : public CRenderTarget
 {
 public:
-    CRenderTarget2D(CD3D12RHI* d3d12RHI,bool depthStencil,UINT width,UINT height,DXGI_FORMAT format,SVector4 clearColor = SVector4::Zero);
+    CRenderTarget2D(CD3D12RHI* d3d12RHI, bool depthStencil, UINT width, UINT height, DXGI_FORMAT format,
+                    SVector4 clearColor = SVector4::Zero);
 
     CD3D12RenderTargetView* GetRTV() const;
 
@@ -50,10 +51,11 @@ private:
     void CreateTexture();
 };
 
-class CRenderTargetCube: public CRenderTarget
+class CRenderTargetCube : public CRenderTarget
 {
 public:
-    CRenderTargetCube(CD3D12RHI* d3d12RHI, bool depthStencil,UINT size,DXGI_FORMAT format,SVector4 clearColor = SVector4::Zero);
+    CRenderTargetCube(CD3D12RHI* d3d12RHI, bool depthStencil, UINT size, DXGI_FORMAT format,
+                      SVector4 clearColor = SVector4::Zero);
 
     CD3D12RenderTargetView* GetRTV(int index) const;
 

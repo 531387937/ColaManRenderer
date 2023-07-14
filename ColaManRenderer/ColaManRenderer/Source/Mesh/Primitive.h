@@ -8,59 +8,77 @@
 class CPrimitive
 {
 public:
-    CPrimitive(){}
+    CPrimitive()
+    {
+    }
 
-    virtual ~CPrimitive(){}
+    virtual ~CPrimitive()
+    {
+    }
 
-    virtual void GenerateBoundingBox(){}
+    virtual void GenerateBoundingBox()
+    {
+    }
 
     bool GetLocalBoundingBox(CBoundingBox& box) const;
 
     bool GetWorldBoundingBox(CBoundingBox& box) const;
 
     virtual bool Intersect(const CRay& ray, float& dist, bool& bBackFace) { return false; }
+
 protected:
     CTransform WorldTransform;
     CBoundingBox BoundingBox;
 };
 
 
-class CPoint:public CPrimitive
+class CPoint : public CPrimitive
 {
 public:
     CPoint() = default;
 
-    CPoint(const SVector3& point, const SColor color):Color(color),Point(point){}
+    CPoint(const SVector3& point, const SColor color): Point(point), Color(color)
+    {
+    }
+
 public:
     SVector3 Point;
     SColor Color;
 };
 
-class CLine:public CPrimitive
+class CLine : public CPrimitive
 {
 public:
     CLine() = default;
 
-    CLine(const SVector3& pointA,const SVector3& pointB,const SColor color):PointA(pointA),PointB(pointB),Color(color){}
+    CLine(const SVector3& pointA, const SVector3& pointB, const SColor color): PointA(pointA), PointB(pointB),
+                                                                               Color(color)
+    {
+    }
 
-    virtual void GenerateBoundingBox() override;
+    void GenerateBoundingBox() override;
+
 public:
     SVector3 PointA;
     SVector3 PointB;
     SColor Color;
 };
 
-class CTriangle:public CPrimitive
+class CTriangle : public CPrimitive
 {
 public:
     CTriangle() = default;
 
-    CTriangle(const SVector3& pointA,const SVector3& pointB,const SVector3& pointC,const SColor& color):PointA(pointA),
-    PointB(pointB),PointC(pointC),Color(color){}
+    CTriangle(const SVector3& pointA, const SVector3& pointB, const SVector3& pointC, const SColor& color):
+        PointA(pointA),
+        PointB(pointB), PointC(pointC), Color(color)
+    {
+    }
 
-    virtual void GenerateBoundingBox() override;
+    void GenerateBoundingBox() override;
 
-    virtual bool Intersect(const CRay& ray, float& dist, bool& bBackFace) override;
+    bool Intersect(const CRay& ray, float& dist, bool& bBackFace) override;
+
 public:
     SVector3 PointA;
     SVector3 PointB;
@@ -68,15 +86,16 @@ public:
     SColor Color;
 };
 
-class CMeshPrimitive:public CPrimitive
+class CMeshPrimitive : public CPrimitive
 {
 public:
-    CMeshPrimitive(const std::string& meshName,const CTransform& worldTransform):MeshName(meshName)
+    CMeshPrimitive(const std::string& meshName, const CTransform& worldTransform): MeshName(meshName)
     {
         WorldTransform = worldTransform;
     }
 
-    virtual void GenerateBoundingBox() override;
+    void GenerateBoundingBox() override;
+
 private:
     std::string MeshName;
 };

@@ -6,12 +6,14 @@ public:
     SColor() = default;
 
     SColor(float Value)
-        :R(Value), G(Value), B(Value), A(Value)
-    {}
+        : R(Value), G(Value), B(Value), A(Value)
+    {
+    }
 
     SColor(float InR, float InG, float InB, float InA = 1.0f)
-        :R(InR), G(InG), B(InB), A(InA)
-    {}
+        : R(InR), G(InG), B(InB), A(InA)
+    {
+    }
 
 public:
     static const SColor Black;

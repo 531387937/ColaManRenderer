@@ -22,19 +22,22 @@
 inline void DebugTrace(_In_z_ _Printf_format_string_ const char* format, ...) noexcept
 {
 #ifdef _DEBUG
-	va_list args;
-	va_start(args, format);
+    va_list args;
+    va_start(args, format);
 
-	char buff[1024] = {};
-	vsprintf_s(buff, format, args);
-	OutputDebugStringA(buff);
-	va_end(args);
+    char buff[1024] = {};
+    vsprintf_s(buff, format, args);
+    OutputDebugStringA(buff);
+    va_end(args);
 #else
 	UNREFERENCED_PARAMETER(format);
 #endif
 }
 
-struct handle_closer { void operator()(HANDLE h) noexcept { if (h) CloseHandle(h); } };
+struct handle_closer
+{
+    void operator()(HANDLE h) noexcept { if (h) CloseHandle(h); }
+};
 
 using ScopedHandle = std::unique_ptr<void, handle_closer>;
 

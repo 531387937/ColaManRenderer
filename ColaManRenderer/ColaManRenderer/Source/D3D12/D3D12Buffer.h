@@ -5,24 +5,25 @@
 class CD3D12Buffer
 {
 public:
-    CD3D12Buffer(){}
+    CD3D12Buffer()
+    {
+    }
 
-    virtual ~CD3D12Buffer();
+    virtual ~CD3D12Buffer() = default;
 
-    CD3D12Resource* GetResource(){return ResourceLocation.UnderlyingResource;}
+    CD3D12Resource* GetResource() { return ResourceLocation.UnderlyingResource; }
 
 public:
     CD3D12ResourceLocation ResourceLocation;
 };
 
-class CD3D12ConstantBuffer:public CD3D12Buffer
+class CD3D12ConstantBuffer : public CD3D12Buffer
 {
-    
 };
 
-typedef std::shared_ptr<CD3D12ConstantBuffer> CD3D12ConstantBufferRef;
+using CD3D12ConstantBufferRef = std::shared_ptr<CD3D12ConstantBuffer>;
 
-class CD3D12StructuredBuffer:public CD3D12Buffer
+class CD3D12StructuredBuffer : public CD3D12Buffer
 {
 public:
     CD3D12ShaderResourceView* GetSRV()
@@ -38,9 +39,10 @@ public:
 private:
     std::unique_ptr<CD3D12ShaderResourceView> SRV = nullptr;
 };
-typedef std::shared_ptr<CD3D12StructuredBuffer> CD3D12StructuredBufferRef;
 
-class CD3D12RWStructuredBuffer: public CD3D12Buffer
+using CD3D12StructuredBufferRef = std::shared_ptr<CD3D12StructuredBuffer>;
+
+class CD3D12RWStructuredBuffer : public CD3D12Buffer
 {
 public:
     CD3D12ShaderResourceView* GetSRV()
@@ -68,24 +70,25 @@ private:
 
     std::unique_ptr<CD3D12UnorderedAccessView> UAV = nullptr;
 };
-typedef std::shared_ptr<CD3D12RWStructuredBuffer> CD3D12RWStructuredBufferRef;
+
+using CD3D12RWStructuredBufferRef = std::shared_ptr<CD3D12RWStructuredBuffer>;
 
 class CD3D12VertexBuffer : public CD3D12Buffer
 {
-
 };
-typedef std::shared_ptr<CD3D12VertexBuffer> CD3D12VertexBufferRef;
+
+using CD3D12VertexBufferRef = std::shared_ptr<CD3D12VertexBuffer>;
 
 
 class CD3D12IndexBuffer : public CD3D12Buffer
 {
-
 };
-typedef std::shared_ptr<CD3D12IndexBuffer> CD3D12IndexBufferRef;
+
+using CD3D12IndexBufferRef = std::shared_ptr<CD3D12IndexBuffer>;
 
 
 class CD3D12ReadBackBuffer : public CD3D12Buffer
 {
-
 };
-typedef std::shared_ptr<CD3D12ReadBackBuffer> CD3D12ReadBackBufferRef;
+
+using CD3D12ReadBackBufferRef = std::shared_ptr<CD3D12ReadBackBuffer>;

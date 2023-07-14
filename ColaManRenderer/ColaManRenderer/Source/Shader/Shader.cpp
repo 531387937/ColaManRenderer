@@ -15,8 +15,8 @@ void SShaderDefines::GetD3DShaderMacro(std::vector<D3D_SHADER_MACRO>& OutMacros)
     }
 
     D3D_SHADER_MACRO Macro;
-    Macro.Name = NULL;
-    Macro.Definition = NULL;
+    Macro.Name = nullptr;
+    Macro.Definition = nullptr;
     OutMacros.push_back(Macro);
 
     //return OutMacros;
@@ -80,7 +80,7 @@ void CShader::Initialize()
         GetShaderParameters(PSBlob, EShaderType::PIXEL_SHADER);
     }
 
-    if(ShaderInfo.bCreateHS)
+    if (ShaderInfo.bCreateHS)
     {
         auto HSBlob = CompileShader(FilePath, ShaderMacros.data(), ShaderInfo.HSEntryPoint, "hs_5_1");
         ShaderPass["HS"] = HSBlob;
@@ -88,7 +88,7 @@ void CShader::Initialize()
         GetShaderParameters(HSBlob, EShaderType::HULL_SHADER);
     }
 
-    if(ShaderInfo.bCreateDS)
+    if (ShaderInfo.bCreateDS)
     {
         auto DSBlob = CompileShader(FilePath, ShaderMacros.data(), ShaderInfo.DSEntryPoint, "ds_5_1");
         ShaderPass["DS"] = DSBlob;
@@ -96,14 +96,14 @@ void CShader::Initialize()
         GetShaderParameters(DSBlob, EShaderType::DOMAIN_SHADER);
     }
 
-    if(ShaderInfo.bCreateDS)
+    if (ShaderInfo.bCreateDS)
     {
         auto GSBlob = CompileShader(FilePath, ShaderMacros.data(), ShaderInfo.GSEntryPoint, "gs_5_1");
         ShaderPass["DS"] = GSBlob;
 
         GetShaderParameters(GSBlob, EShaderType::GEOMETRY_SHADER);
     }
-	
+
     if (ShaderInfo.bCreateCS)
     {
         auto CSBlob = CompileShader(FilePath, ShaderMacros.data(), ShaderInfo.CSEntryPoint, "cs_5_1");
@@ -111,7 +111,7 @@ void CShader::Initialize()
 
         GetShaderParameters(CSBlob, EShaderType::COMPUTE_SHADER);
     }
-	
+
     // Create rootSignature
     CreateRootSignature();
 }
@@ -119,9 +119,9 @@ void CShader::Initialize()
 bool CShader::SetParameter(std::string paramName, CD3D12ConstantBufferRef constantBufferRef)
 {
     bool findParam = false;
-    for(SShaderCBVParameter& param:CBVParams)
+    for (SShaderCBVParameter& param : CBVParams)
     {
-        if(param.Name == paramName)
+        if (param.Name == paramName)
         {
             param.ConstantBufferRef = constantBufferRef;
 
@@ -137,16 +137,16 @@ bool CShader::SetParameter(std::string paramName, CD3D12ShaderResourceView* srv)
     std::vector<CD3D12ShaderResourceView*> srvList;
     srvList.push_back(srv);
 
-    return SetParameter(paramName,srvList);
+    return SetParameter(paramName, srvList);
 }
 
 bool CShader::SetParameter(std::string paramName, const std::vector<CD3D12ShaderResourceView*>& srvList)
 {
     bool findParam = false;
 
-    for(SShaderSRVParameter& param:SRVParams)
+    for (SShaderSRVParameter& param : SRVParams)
     {
-        if(param.Name==paramName)
+        if (param.Name == paramName)
         {
             assert(srvList.size()==param.BindCount);
 
@@ -194,31 +194,32 @@ void CShader::BindParameters()
 
     bool bComputeShader = ShaderInfo.bCreateCS;
 
-    for(int i = 0;i<CBVParams.size();i++)
+    for (int i = 0; i < CBVParams.size(); i++)
     {
-        UINT rootParamIdx = CBVSignatureBaseBindSlot+i;
-        D3D12_GPU_VIRTUAL_ADDRESS GPUVirtualAddress = CBVParams[i].ConstantBufferRef->ResourceLocation.GPUVirtualAddress;
+        UINT rootParamIdx = CBVSignatureBaseBindSlot + i;
+        D3D12_GPU_VIRTUAL_ADDRESS GPUVirtualAddress = CBVParams[i].ConstantBufferRef->ResourceLocation.
+                                                                   GPUVirtualAddress;
 
-        if(bComputeShader)
+        if (bComputeShader)
         {
-            CommandList->SetComputeRootConstantBufferView(rootParamIdx,GPUVirtualAddress);
+            CommandList->SetComputeRootConstantBufferView(rootParamIdx, GPUVirtualAddress);
         }
         else
         {
-            CommandList->SetGraphicsRootConstantBufferView(rootParamIdx,GPUVirtualAddress);
+            CommandList->SetGraphicsRootConstantBufferView(rootParamIdx, GPUVirtualAddress);
         }
     }
 
-    if(SRVCount>0)
+    if (SRVCount > 0)
     {
         std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> srcDescriptors;
         srcDescriptors.resize(SRVCount);
 
-        for(const SShaderSRVParameter& param:SRVParams)
+        for (const SShaderSRVParameter& param : SRVParams)
         {
-            for(UINT i = 0;i<param.SRVList.size();i++)
+            for (UINT i = 0; i < param.SRVList.size(); i++)
             {
-                UINT index = param.BindPoint+i;
+                UINT index = param.BindPoint + i;
                 srcDescriptors[index] = param.SRVList[i]->GetDescriptorHandle();
             }
         }
@@ -236,7 +237,7 @@ void CShader::BindParameters()
         }
     }
 
-    if(UAVCount > 0)
+    if (UAVCount > 0)
     {
         std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> SrcDescriptors;
         SrcDescriptors.resize(UAVCount);
@@ -283,7 +284,7 @@ Microsoft::WRL::ComPtr<ID3DBlob> CShader::CompileShader(const std::wstring& File
                             Entrypoint.c_str(), Target.c_str(), CompileFlags, 0, &ByteCode, &Errors);
 
     if (Errors != nullptr)
-        OutputDebugStringA((char*)Errors->GetBufferPointer());
+        OutputDebugStringA(static_cast<char*>(Errors->GetBufferPointer()));
 
     ThrowIfFailed(hr);
 
@@ -417,7 +418,7 @@ void CShader::CreateRootSignature()
     {
         if (CBVSignatureBaseBindSlot == -1)
         {
-            CBVSignatureBaseBindSlot = (UINT)slotRootParameter.size();
+            CBVSignatureBaseBindSlot = static_cast<UINT>(slotRootParameter.size());
         }
 
         CD3DX12_ROOT_PARAMETER rootParam;
@@ -433,7 +434,7 @@ void CShader::CreateRootSignature()
 
     if (SRVCount > 0)
     {
-        SRVSignatureBindSlot = (UINT)slotRootParameter.size();
+        SRVSignatureBindSlot = static_cast<UINT>(slotRootParameter.size());
 
         CD3DX12_DESCRIPTOR_RANGE SRVTable;
         SRVTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, SRVCount, 0, 0);
@@ -451,7 +452,7 @@ void CShader::CreateRootSignature()
 
     if (UAVCount > 0)
     {
-        UAVSignatureBindSlot = (UINT)slotRootParameter.size();
+        UAVSignatureBindSlot = static_cast<UINT>(slotRootParameter.size());
 
         CD3DX12_DESCRIPTOR_RANGE UAVTable;
         UAVTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_UAV, UAVCount, 0, 0);
@@ -463,8 +464,8 @@ void CShader::CreateRootSignature()
     }
     auto StaticSamplers = CreateStaticSamplers();
 
-    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc((UINT)slotRootParameter.size(), slotRootParameter.data(),
-                                            (UINT)StaticSamplers.size(), StaticSamplers.data(),
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(static_cast<UINT>(slotRootParameter.size()), slotRootParameter.data(),
+                                            static_cast<UINT>(StaticSamplers.size()), StaticSamplers.data(),
                                             D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
     Microsoft::WRL::ComPtr<ID3DBlob> serializedRootSig = nullptr;
@@ -474,7 +475,7 @@ void CShader::CreateRootSignature()
 
     if (errorBlob != nullptr)
     {
-        ::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+        OutputDebugStringA(static_cast<char*>(errorBlob->GetBufferPointer()));
     }
     ThrowIfFailed(hr);
 

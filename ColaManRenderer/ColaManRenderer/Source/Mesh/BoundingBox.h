@@ -16,7 +16,7 @@ public:
 
     SVector3 GetExtend() const { return (Max - Min) * 0.5f; }
 
-    SVector3 GetSize() const { return  (Max - Min); }
+    SVector3 GetSize() const { return (Max - Min); }
 
     int GetWidestAxis() const;
 
@@ -34,6 +34,7 @@ public:
     bool Intersect(const CRay& Ray, float& Dist0, float& Dist1);
 
     DirectX::BoundingBox GetD3DBox();
+
 public:
     bool bInit = false;
 

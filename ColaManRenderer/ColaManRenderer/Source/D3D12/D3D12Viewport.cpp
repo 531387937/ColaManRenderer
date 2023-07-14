@@ -2,7 +2,7 @@
 #include "D3D12RHI.h"
 
 CD3D12Viewport::CD3D12Viewport(CD3D12RHI* d3d12RHI, const SD3D12ViewportInfo& info, int width, int height):
-D3D12RHI(d3d12RHI),ViewportInfo(info),ViewportHeight(height),ViewportWidth(width)
+    D3D12RHI(d3d12RHI), ViewportInfo(info), ViewportWidth(width), ViewportHeight(height)
 {
     Initialize();
 }
@@ -20,17 +20,19 @@ void CD3D12Viewport::OnResize(int width, int height)
 
     D3D12RHI->GetDevice()->GetCommandContext()->ResetCommandList();
 
-    for(UINT i = 0;i<SwapChainBufferCount;i++)
+    for (UINT i = 0; i < SwapChainBufferCount; i++)
     {
         RenderTargetTextures[i].reset();
     }
     DepthStencilTexture.reset();
 
-    ThrowIfFailed(SwapChain->ResizeBuffers(SwapChainBufferCount,ViewportWidth,ViewportHeight,ViewportInfo.BackBufferFormat,DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH));
+    ThrowIfFailed(
+        SwapChain->ResizeBuffers(SwapChainBufferCount,ViewportWidth,ViewportHeight,ViewportInfo.BackBufferFormat,
+            DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH));
 
     CurrBackBuffer = 0;
 
-    for(UINT i = 0;i<SwapChainBufferCount;i++)
+    for (UINT i = 0; i < SwapChainBufferCount; i++)
     {
         Microsoft::WRL::ComPtr<ID3D12Resource> SwapChainBuffer = nullptr;
         ThrowIfFailed(SwapChain->GetBuffer(i,IID_PPV_ARGS(&SwapChainBuffer)));
@@ -40,7 +42,7 @@ void CD3D12Viewport::OnResize(int width, int height)
         STextureInfo textureInfo;
         textureInfo.RTVFormat = backBufferDesc.Format;
         textureInfo.InitState = D3D12_RESOURCE_STATE_PRESENT;
-        RenderTargetTextures[i] = D3D12RHI->CreateTexture(SwapChainBuffer,textureInfo,TexCreate_RTV);
+        RenderTargetTextures[i] = D3D12RHI->CreateTexture(SwapChainBuffer, textureInfo, TexCreate_RTV);
     }
 
     STextureInfo textureInfo;
@@ -52,7 +54,7 @@ void CD3D12Viewport::OnResize(int width, int height)
     textureInfo.MipCount = 1;
     textureInfo.ArraySize = 1;
     textureInfo.InitState = D3D12_RESOURCE_STATE_DEPTH_WRITE;
-    textureInfo.Format = DXGI_FORMAT_R24G8_TYPELESS;  // Create with a typeless format, support DSV and SRV(for SSAO)
+    textureInfo.Format = DXGI_FORMAT_R24G8_TYPELESS; // Create with a typeless format, support DSV and SRV(for SSAO)
     textureInfo.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
     textureInfo.SRVFormat = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 
@@ -75,7 +77,7 @@ void CD3D12Viewport::GetD3DViewport(D3D12_VIEWPORT& d3dViewPort, D3D12_RECT& d3d
     d3dViewPort.MinDepth = 0.0f;
     d3dViewPort.MaxDepth = 1.0f;
 
-    d3dRect = { 0, 0, ViewportWidth, ViewportHeight };
+    d3dRect = {0, 0, ViewportWidth, ViewportHeight};
 }
 
 void CD3D12Viewport::Present()
@@ -131,8 +133,8 @@ void CD3D12Viewport::CreateSwapChain()
     desc.BufferDesc.Format = ViewportInfo.BackBufferFormat;
     desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
     desc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-    desc.SampleDesc.Count = ViewportInfo.bEnable4xMsaa?4:1;
-    desc.SampleDesc.Quality = ViewportInfo.bEnable4xMsaa?(ViewportInfo.QualityOf4xMsaa-1):0;
+    desc.SampleDesc.Count = ViewportInfo.bEnable4xMsaa ? 4 : 1;
+    desc.SampleDesc.Quality = ViewportInfo.bEnable4xMsaa ? (ViewportInfo.QualityOf4xMsaa - 1) : 0;
     desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     desc.BufferCount = SwapChainBufferCount;
     desc.OutputWindow = ViewportInfo.WindowHandle;

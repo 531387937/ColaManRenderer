@@ -7,7 +7,8 @@ class CD3D12BuddyAllocator;
 class CD3D12Resource
 {
 public:
-    CD3D12Resource(Microsoft::WRL::ComPtr<ID3D12Resource> InD3DResource,D3D12_RESOURCE_STATES InitState = D3D12_RESOURCE_STATE_COMMON);
+    CD3D12Resource(Microsoft::WRL::ComPtr<ID3D12Resource> InD3DResource,
+                   D3D12_RESOURCE_STATES InitState = D3D12_RESOURCE_STATE_COMMON);
 
     void Map();
 
@@ -47,7 +48,7 @@ public:
 
     void ReleaseResource();
 
-    void SetType(EResourceLocationType Type) { ResourceLocationType = Type;}
+    void SetType(EResourceLocationType Type) { ResourceLocationType = Type; }
 
 public:
     EResourceLocationType ResourceLocationType = EResourceLocationType::Undefined;
@@ -58,7 +59,7 @@ public:
 
     CD3D12Resource* UnderlyingResource = nullptr;
 
-    union 
+    union
     {
         uint64_t OffsetFromBaseOfResource;
         uint64_t OffsetFromBaseOfHeap;
@@ -69,22 +70,23 @@ public:
     void* MappedAddress = nullptr;
 };
 
-template<typename T>
+template <typename T>
 class CD3D12ScopeMap
 {
 public:
     CD3D12ScopeMap(CD3D12Resource* Resource)
     {
         D3DResource = Resource->D3DResource.Get();
-        D3DResource->Map(0,nullptr,reinterpret_cast<void**>(&MappedData));
+        D3DResource->Map(0, nullptr, reinterpret_cast<void**>(&MappedData));
     }
 
     ~CD3D12ScopeMap()
     {
-        D3DResource->Unmap(0,nullptr);
+        D3DResource->Unmap(0, nullptr);
     }
 
-    T* GetMappedData() {return MappedData;}
+    T* GetMappedData() { return MappedData; }
+
 private:
     ID3D12Resource* D3DResource = nullptr;
 

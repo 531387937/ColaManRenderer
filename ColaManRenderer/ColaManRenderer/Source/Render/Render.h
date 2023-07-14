@@ -11,6 +11,7 @@
 #include "MeshBatch.h"
 #include "PrimitiveBatch.h"
 #include "PSO.h"
+#include "RenderProxy.h"
 #include "ShadowMap.h"
 #include "Shader/Shader.h"
 #include "World/World.h"
@@ -51,7 +52,8 @@ public:
 
     bool IsInitialize();
 
-    bool Initialize(int WindowWidth,int WindowHeight, CD3D12RHI* d3d12RHI,CWorld* world, const SRenderSettings& settings);
+    bool Initialize(int WindowWidth, int WindowHeight, CD3D12RHI* d3d12RHI, CWorld* world,
+                    const SRenderSettings& settings);
 
     void OnResize(int Width, int Height);
 
@@ -123,7 +125,7 @@ private:
 
     void UpdateLightData();
 
-    void UpdateShadowPassCB(const SSceneView& sceneView,UINT shadowWidth, UINT ShadowHeight);
+    void UpdateShadowPassCB(const SSceneView& sceneView, UINT shadowWidth, UINT ShadowHeight);
 
     void GetShadowPassMeshCommandMap(EShadowMapType Type);
 
@@ -151,7 +153,8 @@ private:
 
     void GatherAllPrimitiveBatches();
 
-    void GatherPrimitiveBatches(const std::vector<SPrimitiveVertex>& vertices, D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveType);
+    void GatherPrimitiveBatches(const std::vector<SPrimitiveVertex>& vertices,
+                                D3D12_PRIMITIVE_TOPOLOGY_TYPE primitiveType);
 
     void PrimitivesPass();
 
@@ -175,8 +178,9 @@ public:
     void ToggleSSR();
 
     void ToggleSSAO();
+
 private:
-    bool bInitialize;
+    bool bInitialize = false;
 
     int WindowWidth;
     int WindowHeight;
@@ -197,7 +201,7 @@ private:
     std::unique_ptr<CRenderTarget2D> GBufferBaseColor;
     std::unique_ptr<CRenderTarget2D> GBufferNormal;
     std::unique_ptr<CRenderTarget2D> GBufferWorldPos;
-    std::unique_ptr<CRenderTarget2D> GBufferORM;    //Occlusion、Roughness、Metallic
+    std::unique_ptr<CRenderTarget2D> GBufferORM; //Occlusion、Roughness、Metallic
     std::unique_ptr<CRenderTarget2D> GBufferVelocity;
     std::unique_ptr<CRenderTarget2D> GBufferEmissive;
 
@@ -214,7 +218,7 @@ private:
     UINT FrameCount = 0;
 
 private:
-    std::unordered_map<std::string,SMeshProxy> MeshProxyMap;
+    std::unordered_map<std::string, SMeshProxy> MeshProxyMap;
 
     CInputLayoutManager InputLayoutManager;
 
@@ -230,7 +234,7 @@ private:
 
     const static UINT IBLPrefilterMaxMipLevel = 5;
 
-    CD3D12ConstantBufferRef IBLPrefilterEnvPassCBRef[IBLPrefilterMaxMipLevel*6];
+    CD3D12ConstantBufferRef IBLPrefilterEnvPassCBRef[IBLPrefilterMaxMipLevel * 6];
 
     CD3D12ConstantBufferRef DefferedLightPassCBRef;
 
@@ -294,15 +298,15 @@ private:
     //MeshBatch && MeshCommand
     std::vector<SMeshBatch> MeshBatches;
 
-    std::unordered_map<SGraphicsPSODescriptor,CMeshCommandList> ShadowMeshCommandMap;
+    std::unordered_map<SGraphicsPSODescriptor, CMeshCommandList> ShadowMeshCommandMap;
 
-    std::unordered_map<SGraphicsPSODescriptor,CMeshCommandList> BaseMeshCommandMap;
+    std::unordered_map<SGraphicsPSODescriptor, CMeshCommandList> BaseMeshCommandMap;
 
-    std::unordered_map<SGraphicsPSODescriptor,CMeshCommandList> BackDepthCommandMap;
+    std::unordered_map<SGraphicsPSODescriptor, CMeshCommandList> BackDepthCommandMap;
 
     const int MaxRenderMeshCount = 100;
 
-    std::unordered_map<SGraphicsPSODescriptor,SPrimitiveBatch> PSOPrimitiveBatchMap;
+    std::unordered_map<SGraphicsPSODescriptor, SPrimitiveBatch> PSOPrimitiveBatchMap;
 
     //Light
     CD3D12StructuredBufferRef LightShaderParametersBuffer = nullptr;
@@ -322,9 +326,14 @@ private:
 
     std::vector<CD3D12ShaderResourceView*> ShadowMapCubeSRVs;
 
+    //Sky
+    CMeshComponent* SkyMeshComponent = nullptr;
+
+    std::string SkyCubeTextureName;
+
     //PBR
     std::unique_ptr<CSceneCaptureCube> IBLEnvironmentMap;
-    
+
     std::unique_ptr<CSceneCaptureCube> IBLIrradianceMap;
 
     std::vector<std::unique_ptr<CSceneCaptureCube>> IBLPrefilterEnvMaps;

@@ -1,4 +1,5 @@
 ﻿#include "D3D12RHI.h"
+#define InstalledDebugLayers true
 
 CD3D12RHI::CD3D12RHI()
 {
@@ -12,14 +13,14 @@ CD3D12RHI::~CD3D12RHI()
 void CD3D12RHI::Initialize(HWND windowHandle, int windowWidth, int windowHeight)
 {
     UINT DxgiFactoryFlags = 0;
-#if (defined(DEBUG) || defined(_DEBUG)) && InstalledDebugLayers 
+#if (defined(DEBUG) || defined(_DEBUG)) && InstalledDebugLayers
     {
-        ComPtr<ID3D12Debug> DebugController;
+        Microsoft::WRL::ComPtr<ID3D12Debug> DebugController;
         ThrowIfFailed(D3D12GetDebugInterface(IID_PPV_ARGS(DebugController.GetAddressOf())));
         DebugController->EnableDebugLayer();
     }
 
-    ComPtr<IDXGIInfoQueue> DxgiInfoQueue;
+    Microsoft::WRL::ComPtr<IDXGIInfoQueue> DxgiInfoQueue;
     if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(DxgiInfoQueue.GetAddressOf()))))
     {
         DxgiFactoryFlags = DXGI_CREATE_FACTORY_DEBUG;
@@ -40,12 +41,11 @@ void CD3D12RHI::Initialize(HWND windowHandle, int windowWidth, int windowHeight)
     ViewportInfo.bEnable4xMsaa = false;
     ViewportInfo.QualityOf4xMsaa = GetSupportMSAAQuality(ViewportInfo.BackBufferFormat);
 
-    Viewport = std::make_unique<CD3D12Viewport>(this,ViewportInfo,windowWidth,windowHeight);
+    Viewport = std::make_unique<CD3D12Viewport>(this, ViewportInfo, windowWidth, windowHeight);
 
 #ifdef _DEBUG
     LogAdapters();
 #endif
-    
 }
 
 void CD3D12RHI::Destroy()
@@ -84,16 +84,17 @@ void CD3D12RHI::Present()
 
 void CD3D12RHI::ResizeViewport(int width, int height)
 {
-    GetViewport()->OnResize(width,height);
+    GetViewport()->OnResize(width, height);
 }
 
 void CD3D12RHI::TransitionResource(CD3D12Resource* resource, D3D12_RESOURCE_STATES stateAfter)
 {
     D3D12_RESOURCE_STATES CurrState = resource->CurrentState;
 
-    if(stateAfter!=CurrState)
+    if (stateAfter != CurrState)
     {
-        GetDevice()->GetCommandList()->ResourceBarrier(1,&CD3DX12_RESOURCE_BARRIER::Transition(resource->D3DResource.Get(),CurrState,stateAfter));
+        GetDevice()->GetCommandList()->ResourceBarrier(
+            1, &CD3DX12_RESOURCE_BARRIER::Transition(resource->D3DResource.Get(), CurrState, stateAfter));
 
         resource->CurrentState = stateAfter;
     }
@@ -105,9 +106,10 @@ void CD3D12RHI::CopyResource(CD3D12Resource* dstResource, CD3D12Resource* srcRes
 }
 
 void CD3D12RHI::CopyBufferRegion(CD3D12Resource* dstResource, UINT64 dstOffset, CD3D12Resource* srcResource,
-    UINT64 srcOffset, UINT64 size)
+                                 UINT64 srcOffset, UINT64 size)
 {
-    GetDevice()->GetCommandList()->CopyBufferRegion(dstResource->D3DResource.Get(), dstOffset, srcResource->D3DResource.Get(), srcOffset, size);
+    GetDevice()->GetCommandList()->CopyBufferRegion(dstResource->D3DResource.Get(), dstOffset,
+                                                    srcResource->D3DResource.Get(), srcOffset, size);
 }
 
 void CD3D12RHI::CopyTextureRegion(const D3D12_TEXTURE_COPY_LOCATION* dst, UINT dstX, UINT dstY, UINT dstZ,
@@ -120,13 +122,13 @@ void CD3D12RHI::SetVertexBuffer(const CD3D12VertexBufferRef& vertexBuffer, UINT 
 {
     const CD3D12ResourceLocation& ResourceLocation = vertexBuffer->ResourceLocation;
     CD3D12Resource* resource = ResourceLocation.UnderlyingResource;
-    TransitionResource(resource,D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER|D3D12_RESOURCE_STATE_INDEX_BUFFER);
+    TransitionResource(resource, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER | D3D12_RESOURCE_STATE_INDEX_BUFFER);
 
     D3D12_VERTEX_BUFFER_VIEW vbv;
-    vbv.BufferLocation = ResourceLocation.GPUVirtualAddress+offset;
+    vbv.BufferLocation = ResourceLocation.GPUVirtualAddress + offset;
     vbv.StrideInBytes = stride;
     vbv.SizeInBytes = size;
-    GetDevice()->GetCommandList()->IASetVertexBuffers(0,1,&vbv);
+    GetDevice()->GetCommandList()->IASetVertexBuffers(0, 1, &vbv);
 }
 
 void CD3D12RHI::SetIndexBuffer(const CD3D12IndexBufferRef& indexBuffer, UINT offset, DXGI_FORMAT format, UINT size)

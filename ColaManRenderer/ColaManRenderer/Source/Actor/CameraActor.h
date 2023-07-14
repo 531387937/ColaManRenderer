@@ -6,11 +6,11 @@
 class CCameraActor : public CActor
 {
 public:
-	CCameraActor(const std::string& Name);
-	~CCameraActor();
+    CCameraActor(const std::string& Name);
+    ~CCameraActor() override;
 
-	CCameraComponent* GetCameraComponent();
+    CCameraComponent* GetCameraComponent();
 
 private:
-	CCameraComponent* CameraComponent = nullptr;
+    CCameraComponent* CameraComponent = nullptr;
 };

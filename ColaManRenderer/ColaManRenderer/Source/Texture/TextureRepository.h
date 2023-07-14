@@ -8,12 +8,12 @@
 class CTextureRepository
 {
 public:
-	static CTextureRepository& Get();
+    static CTextureRepository& Get();
 
-	void Load();
+    void Load();
 
-	void Unload();
+    void Unload();
 
 public:
-	std::unordered_map<std::string /*TextureName*/, std::shared_ptr<CTexture>> TextureMap;
+    std::unordered_map<std::string /*TextureName*/, std::shared_ptr<CTexture>> TextureMap;
 };

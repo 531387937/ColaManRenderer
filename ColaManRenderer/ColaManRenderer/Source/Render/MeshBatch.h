@@ -25,13 +25,13 @@ struct SMeshCommand
     {
         std::unordered_map<std::string, CD3D12ConstantBufferRef> CBVParams;
 
-        std::unordered_map<std::string,std::vector<CD3D12ShaderResourceView*>> SRVParams;
+        std::unordered_map<std::string, std::vector<CD3D12ShaderResourceView*>> SRVParams;
     };
 
 public:
-    void SetShaderParameter(std::string param,CD3D12ConstantBufferRef CBV)
+    void SetShaderParameter(std::string param, CD3D12ConstantBufferRef CBV)
     {
-        ShaderParameters.CBVParams.insert(std::make_pair(param,CBV));
+        ShaderParameters.CBVParams.insert(std::make_pair(param, CBV));
     }
 
     void SetShaderParameter(std::string param, CD3D12ShaderResourceView* SRV)
@@ -39,21 +39,21 @@ public:
         std::vector<CD3D12ShaderResourceView*> SRVs;
         SRVs.push_back(SRV);
 
-        ShaderParameters.SRVParams.insert(std::make_pair(param,SRVs));
+        ShaderParameters.SRVParams.insert(std::make_pair(param, SRVs));
     }
 
     void ApplyShaderParamters(CShader* Shader) const
     {
-        if(Shader)
+        if (Shader)
         {
-            for(const auto& item:ShaderParameters.CBVParams)
+            for (const auto& item : ShaderParameters.CBVParams)
             {
-                Shader->SetParameter(item.first,item.second);
+                Shader->SetParameter(item.first, item.second);
             }
 
-            for(const auto& item:ShaderParameters.SRVParams)
+            for (const auto& item : ShaderParameters.SRVParams)
             {
-                Shader->SetParameter(item.first,item.second);
+                Shader->SetParameter(item.first, item.second);
             }
         }
     }
@@ -66,4 +66,4 @@ public:
     SMeshShaderParameters ShaderParameters;
 };
 
-typedef std::vector<SMeshCommand> CMeshCommandList;
+using CMeshCommandList = std::vector<SMeshCommand>;

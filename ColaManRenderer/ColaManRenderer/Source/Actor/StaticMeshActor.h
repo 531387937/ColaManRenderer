@@ -6,18 +6,18 @@
 class CStaticMeshActor : public CActor
 {
 public:
-	CStaticMeshActor(const std::string& Name);
+    CStaticMeshActor(const std::string& Name);
 
-	~CStaticMeshActor();
+    ~CStaticMeshActor() override;
 
-	void SetMesh(std::string MeshName);
+    void SetMesh(std::string MeshName);
 
-	void SetMaterialInstance(std::string MaterialInstanceName);
+    void SetMaterialInstance(std::string MaterialInstanceName);
 
-	void SetTextureScale(const SVector2& Scale);
+    void SetTextureScale(const SVector2& Scale);
 
-	//void SetUseSDF(bool bUseSDF);
+    //void SetUseSDF(bool bUseSDF);
 
 private:
-	CMeshComponent* StaticMeshComponent = nullptr;
+    CMeshComponent* StaticMeshComponent = nullptr;
 };

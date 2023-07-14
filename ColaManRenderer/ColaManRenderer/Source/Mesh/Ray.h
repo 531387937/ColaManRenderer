@@ -6,7 +6,7 @@ class CRay
 public:
     CRay();
 
-    CRay(const SVector3& origin, const SVector3 direction, float matDist = CMath::Infinity);
+    CRay(const SVector3& origin, SVector3 direction, float matDist = CMath::Infinity);
 
 public:
     SVector3 Origin;

@@ -15,38 +15,37 @@
 class CMath
 {
 public:
+    static const float Infinity;
+    static const float Pi;
 
-	static const float Infinity;
-	static const float Pi;
-
-	static int Log2Int(uint64_t v)
-	{
-		unsigned long lz = 0;
+    static int Log2Int(uint64_t v)
+    {
+        unsigned long lz = 0;
 #if defined(_WIN64)
-		_BitScanReverse64(&lz, v);
+        _BitScanReverse64(&lz, v);
 #else
 		if (_BitScanReverse(&lz, v >> 32))
 			lz += 32;
 		else
 			_BitScanReverse(&lz, v & 0xffffffff);
 #endif // _WIN64
-		return lz;
-	}
+        return lz;
+    }
 
-	static int Log2Int(int64_t v) { return Log2Int((uint64_t)v); }
+    static int Log2Int(int64_t v) { return Log2Int(static_cast<uint64_t>(v)); }
 
-	static float gamma(int n)
-	{
-		return float(n * MachineEpsilon) / float(1 - n * MachineEpsilon);
-	}
+    static float gamma(int n)
+    {
+        return static_cast<float>(n * MachineEpsilon) / static_cast<float>(1 - n * MachineEpsilon);
+    }
 
-	static float RadiansToDegrees(float Radians)
-	{
-		return Radians * (180.0f / Pi);
-	}
+    static float RadiansToDegrees(float Radians)
+    {
+        return Radians * (180.0f / Pi);
+    }
 
-	static float DegreesToRadians(float Degrees)
-	{
-		return Degrees * (Pi / 180.0f);
-	}
+    static float DegreesToRadians(float Degrees)
+    {
+        return Degrees * (Pi / 180.0f);
+    }
 };

@@ -2,12 +2,12 @@
 #include "LightActor.h"
 #include "Component/MeshComponent.h"
 
-class CPointLightActor:public CLightActor
+class CPointLightActor : public CLightActor
 {
 public:
     CPointLightActor(const std::string& Name);
 
-    ~CPointLightActor();
+    ~CPointLightActor() override;
 
     float GetAttenuationRange() const
     {
@@ -21,7 +21,8 @@ public:
 
     void UpdateShadowData(CD3D12RHI* d3d12RHI);
 
-    CShadowMapCube* GetShadowMap() {return ShadowMap.get();}
+    CShadowMapCube* GetShadowMap() { return ShadowMap.get(); }
+
 private:
     float AttenuationRange = 10.0f;
 

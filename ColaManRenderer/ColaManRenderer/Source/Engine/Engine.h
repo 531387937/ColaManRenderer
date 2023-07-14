@@ -1,8 +1,10 @@
 ﻿#pragma once
 #include "GameTimer.h"
-#include "World/World.h"
-//#include "Render/Render.h"
 #include "D3D12/D3D12RHI.h"
+
+#include "Render/Render.h"
+class CWorld;
+
 
 class CEngine
 {
@@ -11,7 +13,7 @@ public:
 
     CEngine(const CEngine& rhs) = delete;
 
-    CEngine& operator = (const CEngine& rhs) = delete;
+    CEngine& operator =(const CEngine& rhs) = delete;
 
     virtual ~CEngine();
 
@@ -21,19 +23,19 @@ public:
     HINSTANCE GetEngineInstHandle() const;
     HWND GetMainWnd() const;
 
-    //bool Initialize(CWorld* world,const SRenderSetting& RenderSettings);
+    bool Initialize(CWorld* world, const SRenderSettings& RenderSettings);
 
     int Run();
 
     bool Destroy();
 
-    LRESULT MsgProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam);
+    LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    int GetWindowWidth(){return WindowWidth;}
+    int GetWindowWidth() { return WindowWidth; }
 
-    int GetWindowHeight() {return WindowHeight;}
+    int GetWindowHeight() { return WindowHeight; }
 
-    //CRender* GetRender() { return Render.get(); }
+    CRender* GetRender() { return Render.get(); }
 
 private:
     bool InitMainWindow();
@@ -46,7 +48,7 @@ protected:
     void Update(const GameTimer& gt);
 
     void EndFrame(const GameTimer& gt);
-    
+
     // Convenience overrides for handling mouse input.
     void OnMouseDown(WPARAM btnState, int x, int y) { World->OnMouseDown(btnState, x, y); }
     void OnMouseUp(WPARAM btnState, int x, int y) { World->OnMouseUp(btnState, x, y); }
@@ -60,12 +62,12 @@ protected:
     bool bInitialize = false;
 
     HINSTANCE EngineInstHandle = nullptr; // application instance handle
-    HWND      MainWindowHandle = nullptr; // main window handle
-    bool      bAppPaused = false;  // is the application paused?
-    bool      bAppMinimized = false;  // is the application minimized?
-    bool      bAppMaximized = false;  // is the application maximized?
-    bool      bResizing = false;   // are the resize bars being dragged?
-    bool      bFullscreenState = false;// fullscreen enabled
+    HWND MainWindowHandle = nullptr; // main window handle
+    bool bAppPaused = false; // is the application paused?
+    bool bAppMinimized = false; // is the application minimized?
+    bool bAppMaximized = false; // is the application maximized?
+    bool bResizing = false; // are the resize bars being dragged?
+    bool bFullscreenState = false; // fullscreen enabled
 
     int WindowWidth = 1280;
     int WindowHeight = 720;
@@ -76,5 +78,5 @@ protected:
 
     std::unique_ptr<CWorld> World;
 
-    //std::unique_ptr<CRender> Render; 
+    std::unique_ptr<CRender> Render;
 };

@@ -1,6 +1,6 @@
 ﻿#include "Material.h"
 
-CMaterial::CMaterial(const std::string& name, const std::string& shaderName):Name(name),ShaderName(shaderName)
+CMaterial::CMaterial(const std::string& name, const std::string& shaderName): Name(name), ShaderName(shaderName)
 {
 }
 
@@ -17,14 +17,11 @@ CShader* CMaterial::GetShader(const SShaderDefines& shaderDefines, CD3D12RHI* d3
         ShaderInfo.ShaderDefines = shaderDefines;
         ShaderInfo.bCreateVS = true;
         ShaderInfo.bCreatePS = true;
-        std::unique_ptr<CShader> NewShader = std::make_unique<CShader>(ShaderInfo, d3d12RHI);
+        auto NewShader = std::make_unique<CShader>(ShaderInfo, d3d12RHI);
 
-        ShaderMap.insert({ shaderDefines, std::move(NewShader)});
+        ShaderMap.insert({shaderDefines, std::move(NewShader)});
 
         return ShaderMap[shaderDefines].get();
     }
-    else
-    {
-        return Iter->second.get();
-    }
+    return Iter->second.get();
 }

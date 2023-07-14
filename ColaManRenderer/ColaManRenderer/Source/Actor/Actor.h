@@ -10,13 +10,17 @@ class CActor
 public:
     CActor(const std::string& Name);
 
-    virtual ~CActor(){}
+    virtual ~CActor()
+    {
+    }
 
 public:
-    virtual void Tick(float deltaTime){}
+    virtual void Tick(float deltaTime)
+    {
+    }
 
 public:
-    template<typename T>
+    template <typename T>
     T* AddComponent()
     {
         auto NewComponent = std::make_unique<T>();
@@ -30,7 +34,7 @@ public:
     {
         std::vector<CComponent*> result;
 
-        for(const auto& component :Components)
+        for (const auto& component : Components)
         {
             result.push_back(component.get());
         }
@@ -38,14 +42,14 @@ public:
         return result;
     }
 
-    template<typename T>
+    template <typename T>
     std::vector<T*> GetComponentsOfClass()
     {
         std::vector<T*> result;
-        for(const auto& component:Components)
+        for (const auto& component : Components)
         {
             T* componentOfClass = dynamic_cast<T*>(component.get());
-            if(componentOfClass)
+            if (componentOfClass)
             {
                 result.push_back(componentOfClass);
             }
@@ -75,12 +79,13 @@ public:
 
     CTransform GetActorPrevTransform() const;
 
-    void SetName(std::string name) {ActorName = name;}
+    void SetName(std::string name) { ActorName = name; }
 
-    std::string GetName() const {return ActorName;}
+    std::string GetName() const { return ActorName; }
+
 protected:
     std::string ActorName;
-    
+
     std::vector<std::unique_ptr<CComponent>> Components;
 
     CComponent* RootComponent = nullptr;

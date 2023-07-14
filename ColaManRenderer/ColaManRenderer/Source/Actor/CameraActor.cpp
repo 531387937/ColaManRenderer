@@ -1,20 +1,19 @@
 #include "CameraActor.h"
 
 CCameraActor::CCameraActor(const std::string& Name)
-	:CActor(Name)
+    : CActor(Name)
 {
-	//CameraComponent
-	CameraComponent = AddComponent<CCameraComponent>();
+    //CameraComponent
+    CameraComponent = AddComponent<CCameraComponent>();
 
-	RootComponent = CameraComponent;
+    RootComponent = CameraComponent;
 }
 
 CCameraActor::~CCameraActor()
 {
-
 }
 
 CCameraComponent* CCameraActor::GetCameraComponent()
 {
-	return CameraComponent;
+    return CameraComponent;
 }

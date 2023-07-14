@@ -45,20 +45,20 @@ namespace DirectX
 {
     enum DDS_ALPHA_MODE
     {
-        DDS_ALPHA_MODE_UNKNOWN       = 0,
-        DDS_ALPHA_MODE_STRAIGHT      = 1,
+        DDS_ALPHA_MODE_UNKNOWN = 0,
+        DDS_ALPHA_MODE_STRAIGHT = 1,
         DDS_ALPHA_MODE_PREMULTIPLIED = 2,
-        DDS_ALPHA_MODE_OPAQUE        = 3,
-        DDS_ALPHA_MODE_CUSTOM        = 4,
+        DDS_ALPHA_MODE_OPAQUE = 3,
+        DDS_ALPHA_MODE_CUSTOM = 4,
     };
 
 
-	HRESULT CreateDDSTextureFromFile(_In_z_ const wchar_t* szFileName,
-                                _Out_ STextureInfo& TextureInfo,
-                                _Out_ std::vector<D3D12_SUBRESOURCE_DATA>& initData,
-                                _Out_ std::vector<uint8_t>& ddsData,
-                                _In_ bool forceSRGB,
-		                        _In_ size_t maxsize = 0,
-		                        _Out_opt_ DDS_ALPHA_MODE* alphaMode = nullptr
-	);
+    HRESULT CreateDDSTextureFromFile(_In_z_ const wchar_t* szFileName,
+                                     _Out_ STextureInfo& TextureInfo,
+                                     _Out_ std::vector<D3D12_SUBRESOURCE_DATA>& initData,
+                                     _Out_ std::vector<uint8_t>& ddsData,
+                                     _In_ bool forceSRGB,
+                                     _In_ size_t maxsize = 0,
+                                     _Out_opt_ DDS_ALPHA_MODE* alphaMode = nullptr
+    );
 }

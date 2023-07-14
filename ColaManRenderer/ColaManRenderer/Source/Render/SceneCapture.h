@@ -22,7 +22,7 @@ public:
     void CreatePerspectiveView(const SVector3& eye, const SVector3& target, const SVector3& up,
                                float fov, float aspectRatio, float nearPlane, float farPlane);
 
-    void CreateOrthographicView(const SVector3& eye, const SVector3 target, const SVector3& up,
+    void CreateOrthographicView(const SVector3& eye, SVector3 target, const SVector3& up,
                                 float left, float right, float bottom, float top, float nearPlane, float farPlane);
 
     UINT GetWidth() { return Width; }
@@ -69,7 +69,6 @@ public:
     UINT GetCubeMapSize() { return CubeMapSize; }
 
 private:
-
     void SetViewportAndScissorRect(UINT cubeMapSize);
 
 private:

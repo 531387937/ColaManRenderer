@@ -6,12 +6,12 @@
 #include "Math/Matrix.h"
 #include "Mesh/BoundingBox.h"
 
-class CMeshComponent:public CComponent
+class CMeshComponent : public CComponent
 {
 public:
     void SetMeshName(std::string meshName);
 
-    std::string GetMeshName(){return MeshName;}
+    std::string GetMeshName() { return MeshName; }
 
     bool IsMeshValid() const;
 
@@ -21,7 +21,7 @@ public:
 
     void SetMaterialInstance(std::string MaterialInstanceName);
 
-    CMaterialInstance* GetMaterialInstance(){return MaterialInstance;}
+    CMaterialInstance* GetMaterialInstance() { return MaterialInstance; }
 
 public:
     SMatrix TexTransform = SMatrix::Identity;

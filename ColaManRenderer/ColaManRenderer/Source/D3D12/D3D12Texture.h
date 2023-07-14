@@ -1,19 +1,20 @@
 ﻿#pragma once
 #include "D3D12Resource.h"
 #include "D3D12View.h"
+#include "Math/Math.h"
 
 class CD3D12Texture
 {
 public:
-    CD3D12Resource* GetResource() { return ResourceLocation.UnderlyingResource;}
+    CD3D12Resource* GetResource() { return ResourceLocation.UnderlyingResource; }
 
-    ID3D12Resource* GetD3DResource() {return ResourceLocation.UnderlyingResource->D3DResource.Get();}
+    ID3D12Resource* GetD3DResource() { return ResourceLocation.UnderlyingResource->D3DResource.Get(); }
 
-    void SetRTVClearValue(SVector4 ClearValue) {RTVClearValue = ClearValue;}
+    void SetRTVClearValue(SVector4 ClearValue) { RTVClearValue = ClearValue; }
 
-    SVector4 GetRTVClearValue() {return RTVClearValue;}
+    SVector4 GetRTVClearValue() { return RTVClearValue; }
 
-    float* GetRTVClearValuePtr() {return (float*)&RTVClearValue;}
+    float* GetRTVClearValuePtr() { return (float*)&RTVClearValue; }
 
     CD3D12ShaderResourceView* GetSRV(UINT index = 0)
     {
@@ -67,7 +68,6 @@ public:
     CD3D12ResourceLocation ResourceLocation;
 
 private:
-
     std::vector<std::unique_ptr<CD3D12ShaderResourceView>> SRVs;
 
     std::vector<std::unique_ptr<CD3D12RenderTargetView>> RTVs;
@@ -80,4 +80,4 @@ private:
     SVector4 RTVClearValue;
 };
 
-typedef std::shared_ptr<CD3D12Texture> CD3D12TextureRef;
+using CD3D12TextureRef = std::shared_ptr<CD3D12Texture>;

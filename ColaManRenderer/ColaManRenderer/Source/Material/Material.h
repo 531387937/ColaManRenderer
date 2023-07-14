@@ -14,17 +14,17 @@ enum class EShadingMode
 struct SMaterialParameters
 {
 public:
-    SVector4 DiffuseAlbedo = {1.0f,1.0f,1.0f,1.0f};
+    SVector4 DiffuseAlbedo = {1.0f, 1.0f, 1.0f, 1.0f};
 
-    SVector3 FresnelR0 = {0.01f,0.01f,0.01f};
+    SVector3 FresnelR0 = {0.01f, 0.01f, 0.01f};
 
     float Roughness = 0.25f;
 
-    SVector3 EmissiveColor = {0.0f,0.0f,0.0f};
+    SVector3 EmissiveColor = {0.0f, 0.0f, 0.0f};
 
     SMatrix MatTransform = SMatrix::Identity;
 
-    std::unordered_map<std::string,std::string> TextureMap;
+    std::unordered_map<std::string, std::string> TextureMap;
 };
 
 struct SMaterialRenderState
@@ -35,13 +35,12 @@ struct SMaterialRenderState
 };
 
 
-
 class CMaterial
 {
 public:
     CMaterial(const std::string& name, const std::string& shaderName);
 
-    CShader* GetShader(const SShaderDefines& shaderDefines,CD3D12RHI* d3d12RHI);
+    CShader* GetShader(const SShaderDefines& shaderDefines, CD3D12RHI* d3d12RHI);
 
 public:
     std::string Name;
@@ -50,10 +49,10 @@ public:
 
     SMaterialParameters Parameters;
 
-    SMaterialParameters RenderState;
+    SMaterialRenderState RenderState;
 
 private:
     std::string ShaderName;
 
-    std::unordered_map<SShaderDefines,std::unique_ptr<CShader>> ShaderMap;
+    std::unordered_map<SShaderDefines, std::unique_ptr<CShader>> ShaderMap;
 };

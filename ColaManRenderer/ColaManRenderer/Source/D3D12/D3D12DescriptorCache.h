@@ -1,9 +1,6 @@
 ﻿#pragma once
-#include <wrl/client.h>
-#include <wrl/wrappers/corewrappers.h>
-
-#include "D3D12HeapSlotAllocator.h"
-
+#include "D3D12Utils.h"
+#include "vector"
 class CD3D12Device;
 
 class CD3D12DescriptorCache
@@ -13,16 +10,22 @@ public:
 
     ~CD3D12DescriptorCache();
 
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetCacheCbvSrvUavDescriptorHeap() {return CacheCbvSrvUavDescriptorHeap;}
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetCacheCbvSrvUavDescriptorHeap()
+    {
+        return CacheCbvSrvUavDescriptorHeap;
+    }
 
-    CD3DX12_GPU_DESCRIPTOR_HANDLE AppendCbvSrvUavDescriptors(const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>& descriptors);
+    CD3DX12_GPU_DESCRIPTOR_HANDLE AppendCbvSrvUavDescriptors(
+        const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>& descriptors);
 
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetCacheRtvDescriptorHeap() {return CacheRtvDescriptorHeap;}
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetCacheRtvDescriptorHeap() { return CacheRtvDescriptorHeap; }
 
-    void AppendRtvDescriptors(const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>& rtvDescriptors,CD3DX12_GPU_DESCRIPTOR_HANDLE& outGPUHandle,
-        CD3DX12_CPU_DESCRIPTOR_HANDLE& outCPUHandle);
+    void AppendRtvDescriptors(const std::vector<D3D12_CPU_DESCRIPTOR_HANDLE>& rtvDescriptors,
+                              CD3DX12_GPU_DESCRIPTOR_HANDLE& outGPUHandle,
+                              CD3DX12_CPU_DESCRIPTOR_HANDLE& outCPUHandle);
 
     void Reset();
+
 private:
     void CreateCacheCbvSrvUavDescriptorHeap();
 
@@ -31,6 +34,7 @@ private:
     void ResetCacheCbvSrvUavDescriptorHeap();
 
     void ResetCacheRtvDescriptorHeap();
+
 private:
     CD3D12Device* Device = nullptr;
 

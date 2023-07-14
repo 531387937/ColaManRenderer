@@ -1,8 +1,9 @@
 ﻿#include "MaterialInstance.h"
 
-struct SMaterialConstants;
+#include "Render/RenderProxy.h"
 
-CMaterialInstance::CMaterialInstance(CMaterial* parent, const std::string& name):Material(parent),Name(name)
+
+CMaterialInstance::CMaterialInstance(CMaterial* parent, const std::string& name): Material(parent), Name(name)
 {
     Parameters = Material->Parameters;
 }
@@ -11,7 +12,7 @@ void CMaterialInstance::SetTextureParameter(const std::string& parameter, const 
 {
     auto iter = Parameters.TextureMap.find(parameter);
 
-    if(iter!=Parameters.TextureMap.end())
+    if (iter != Parameters.TextureMap.end())
     {
         iter->second = textureName;
     }
@@ -23,11 +24,11 @@ void CMaterialInstance::CreateMaterialConstantBuffer(CD3D12RHI* d3d12RHI)
     SMaterialConstants MatConst;
 
     MatConst.DiffuseAlbedo = Parameters.DiffuseAlbedo;
-    MatConst.FresnelR0 =Parameters.FresnelR0;
+    MatConst.FresnelR0 = Parameters.FresnelR0;
     MatConst.Roughness = Parameters.Roughness;
     MatConst.MatTransform = Parameters.MatTransform;
     MatConst.EmissiveColor = Parameters.EmissiveColor;
-    MatConst.ShadingModel = (UINT)Material->ShadingModel;
+    MatConst.ShadingModel = static_cast<UINT>(Material->ShadingModel);
 
     //Create ConstantBuffer
     MaterialConstantBuffer = d3d12RHI->CreateConstantBuffer(&MatConst, sizeof(MatConst));

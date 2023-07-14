@@ -3,23 +3,22 @@
 
 #include "InputLayout.h"
 #include "Shader/Shader.h"
+
 struct SGraphicsPSODescriptor
 {
     bool operator ==(const SGraphicsPSODescriptor& other) const
     {
-        return  other.InputLayoutName == InputLayoutName
-        &&other.Shader==Shader
-        &&other.PrimitiveTopologyType==PrimitiveTopologyType
-        &&other.RasterizerDesc.CullMode==RasterizerDesc.CullMode
-        &&other.DepthStencilDesc.DepthFunc == DepthStencilDesc.DepthFunc;
-                        
-                    
+        return other.InputLayoutName == InputLayoutName
+            && other.Shader == Shader
+            && other.PrimitiveTopologyType == PrimitiveTopologyType
+            && other.RasterizerDesc.CullMode == RasterizerDesc.CullMode
+            && other.DepthStencilDesc.DepthFunc == DepthStencilDesc.DepthFunc;
     }
 
 public:
     std::string InputLayoutName;
     CShader* Shader = nullptr;
-    DXGI_FORMAT RTVFormats[8] = { DXGI_FORMAT_R8G8B8A8_UNORM };
+    DXGI_FORMAT RTVFormats[8] = {DXGI_FORMAT_R8G8B8A8_UNORM};
     bool _4xMsaaState = false;
     UINT _4xMsaaQuality = 0;
     DXGI_FORMAT DepthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -54,25 +53,26 @@ class CD3D12RHI;
 class CGraphicsPSOManager
 {
 public:
-    CGraphicsPSOManager(CD3D12RHI* d3d12RHI,CInputLayoutManager* inputLayoutManager);
+    CGraphicsPSOManager(CD3D12RHI* d3d12RHI, CInputLayoutManager* inputLayoutManager);
 
     void CreatePSO(const SGraphicsPSODescriptor& descriptor);
 
     ID3D12PipelineState* GetPSO(const SGraphicsPSODescriptor& descriptor) const;
+
 private:
     CD3D12RHI* D3D12RHI = nullptr;
 
     CInputLayoutManager* InputLayoutManager = nullptr;
 
-    std::unordered_map<SGraphicsPSODescriptor,Microsoft::WRL::ComPtr<ID3D12PipelineState>> PSOMap;
+    std::unordered_map<SGraphicsPSODescriptor, Microsoft::WRL::ComPtr<ID3D12PipelineState>> PSOMap;
 };
 
 struct SComputePSODescriptor
 {
     bool operator==(const SComputePSODescriptor& other) const
     {
-        return other.Shader==Shader
-        &&other.Flags == Flags;
+        return other.Shader == Shader
+            && other.Flags == Flags;
     }
 
     CShader* Shader = nullptr;
@@ -110,5 +110,5 @@ public:
 private:
     CD3D12RHI* d3d12RHI = nullptr;
 
-    std::unordered_map<SComputePSODescriptor,Microsoft::WRL::ComPtr<ID3D12PipelineState>> PSOMap;
+    std::unordered_map<SComputePSODescriptor, Microsoft::WRL::ComPtr<ID3D12PipelineState>> PSOMap;
 };

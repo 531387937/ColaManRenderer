@@ -21,13 +21,14 @@ public:
 
     ID3D12GraphicsCommandList* GetCommandList() { return CommandContext->GetCommandList(); }
 
-    TD3D12UploadBufferAllocator* GetUploadBufferAllocator() { return UploadBufferAllocator.get(); }
+    CD3D12UploadBufferAllocator* GetUploadBufferAllocator() { return UploadBufferAllocator.get(); }
 
-    TD3D12DefaultBufferAllocator* GetDefaultBufferAllocator() { return DefaultBufferAllocator.get(); }
+    CD3D12DefaultBufferAllocator* GetDefaultBufferAllocator() { return DefaultBufferAllocator.get(); }
 
     CD3D3TextureResourceAllocator* GetTextureResourceAllocator() { return TextureResourceAllocator.get(); }
 
     CD3D12HeapSlotAllocator* GetHeapSlotAllocator(D3D12_DESCRIPTOR_HEAP_TYPE HeapType);
+
 private:
     void Initialize();
 
@@ -39,9 +40,9 @@ private:
     std::unique_ptr<CD3D12CommandContext> CommandContext = nullptr;
 
 private:
-    std::unique_ptr<TD3D12UploadBufferAllocator> UploadBufferAllocator = nullptr;
+    std::unique_ptr<CD3D12UploadBufferAllocator> UploadBufferAllocator = nullptr;
 
-    std::unique_ptr<TD3D12DefaultBufferAllocator> DefaultBufferAllocator = nullptr;
+    std::unique_ptr<CD3D12DefaultBufferAllocator> DefaultBufferAllocator = nullptr;
 
     std::unique_ptr<CD3D3TextureResourceAllocator> TextureResourceAllocator = nullptr;
 

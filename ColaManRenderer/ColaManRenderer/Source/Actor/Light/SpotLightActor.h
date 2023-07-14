@@ -2,15 +2,15 @@
 #include "LightActor.h"
 #include "Component/MeshComponent.h"
 
-class CSpotLightActor:public CLightActor
+class CSpotLightActor : public CLightActor
 {
 public:
     CSpotLightActor(const std::string& Name);
 
-    ~CSpotLightActor();
+    ~CSpotLightActor() override;
 
 public:
-    virtual void SetActorTransform(const CTransform& transform) override;
+    void SetActorTransform(const CTransform& transform) override;
 
     SVector3 GetLightDirection();
 
@@ -46,20 +46,21 @@ public:
 
     float GetBottomRadius() const
     {
-        float radians = OuterConeAngle*(CMath::Pi/180.0f);
-        float bottomRadius = AttenuationRange*tan(radians);
+        float radians = OuterConeAngle * (CMath::Pi / 180.0f);
+        float bottomRadius = AttenuationRange * tan(radians);
 
         return bottomRadius;
     }
 
-    void UpdateShadowData(CD3D12RHI* d3d12RHI,EShadowMapImpl smImpl);
+    void UpdateShadowData(CD3D12RHI* d3d12RHI, EShadowMapImpl smImpl);
 
-    CShadowMap2D* GetShadowMap() {return ShadowMap.get();}
+    CShadowMap2D* GetShadowMap() { return ShadowMap.get(); }
 
 private:
     void SetLightDirection(SRotator rotation);
+
 private:
-    SVector3 Direction = {0.0f,-1.0f,0.0f};
+    SVector3 Direction = {0.0f, -1.0f, 0.0f};
 
     float AttenuationRange = 10.0f;
 
@@ -70,5 +71,4 @@ private:
     CMeshComponent* MeshComponent = nullptr;
 
     std::unique_ptr<CShadowMap2D> ShadowMap = nullptr;
-    
 };

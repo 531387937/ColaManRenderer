@@ -7,29 +7,29 @@
 class TBinarySaver
 {
 public:
-	TBinarySaver(const std::wstring& InFilePath);
+    TBinarySaver(const std::wstring& InFilePath);
 
-	template<typename T>
-	bool Save(T Data)
-	{
-		return SaveArray<T>(&Data, 1);
-	}
+    template <typename T>
+    bool Save(T Data)
+    {
+        return SaveArray<T>(&Data, 1);
+    }
 
-	template<typename T>
-	bool SaveArray(T* Data, size_t ElementCount)
-	{
-		auto File = std::fstream(FilePath, std::ios::out | std::ios::binary | std::ios::app);
-		if (File.is_open())
-		{
-			File.write((char*)Data, ElementCount * sizeof(T));
-			File.close();
+    template <typename T>
+    bool SaveArray(T* Data, size_t ElementCount)
+    {
+        auto File = std::fstream(FilePath, std::ios::out | std::ios::binary | std::ios::app);
+        if (File.is_open())
+        {
+            File.write(static_cast<char*>(Data), ElementCount * sizeof(T));
+            File.close();
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 private:
-	std::wstring FilePath;
+    std::wstring FilePath;
 };

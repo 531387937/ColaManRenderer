@@ -19,48 +19,50 @@
 class TBinaryReader
 {
 public:
-	explicit TBinaryReader(_In_z_ wchar_t const* fileName) noexcept(false);
-	TBinaryReader(_In_reads_bytes_(dataSize) uint8_t const* dataBlob, size_t dataSize) noexcept;
+    explicit TBinaryReader(_In_z_ const wchar_t* fileName) noexcept(false);
+    TBinaryReader(_In_reads_bytes_(dataSize) const uint8_t* dataBlob, size_t dataSize) noexcept;
 
-	TBinaryReader(TBinaryReader const&) = delete;
-	TBinaryReader& operator= (TBinaryReader const&) = delete;
+    TBinaryReader(const TBinaryReader&) = delete;
+    TBinaryReader& operator=(const TBinaryReader&) = delete;
 
-	// Reads a single value.
-	template<typename T> T const& Read()
-	{
-		return *ReadArray<T>(1);
-	}
-
-
-	// Reads an array of values.
-	template<typename T> T const* ReadArray(size_t elementCount)
-	{
-		static_assert(std::is_pod<T>::value, "Can only read plain-old-data types");
-
-		uint8_t const* newPos = mPos + sizeof(T) * elementCount;
-
-		if (newPos < mPos)
-			throw std::overflow_error("ReadArray");
-
-		if (newPos > mEnd)
-			throw std::runtime_error("End of file");
-
-		auto result = reinterpret_cast<T const*>(mPos);
-
-		mPos = newPos;
-
-		return result;
-	}
+    // Reads a single value.
+    template <typename T>
+    const T& Read()
+    {
+        return *ReadArray<T>(1);
+    }
 
 
-	// Lower level helper reads directly from the filesystem into memory.
-	static HRESULT ReadEntireFile(_In_z_ wchar_t const* fileName, _Inout_ std::unique_ptr<uint8_t[]>& data, _Out_ size_t* dataSize);
+    // Reads an array of values.
+    template <typename T>
+    const T* ReadArray(size_t elementCount)
+    {
+        static_assert(std::is_pod_v<T>, "Can only read plain-old-data types");
 
+        const uint8_t* newPos = mPos + sizeof(T) * elementCount;
+
+        if (newPos < mPos)
+            throw std::overflow_error("ReadArray");
+
+        if (newPos > mEnd)
+            throw std::runtime_error("End of file");
+
+        auto result = reinterpret_cast<const T*>(mPos);
+
+        mPos = newPos;
+
+        return result;
+    }
+
+
+    // Lower level helper reads directly from the filesystem into memory.
+    static HRESULT ReadEntireFile(_In_z_ const wchar_t* fileName, _Inout_ std::unique_ptr<uint8_t[]>& data,
+                                  _Out_ size_t* dataSize);
 
 private:
-	// The data currently being read.
-	uint8_t const* mPos;
-	uint8_t const* mEnd;
+    // The data currently being read.
+    const uint8_t* mPos;
+    const uint8_t* mEnd;
 
-	std::unique_ptr<uint8_t[]> mOwnedData;
+    std::unique_ptr<uint8_t[]> mOwnedData;
 };

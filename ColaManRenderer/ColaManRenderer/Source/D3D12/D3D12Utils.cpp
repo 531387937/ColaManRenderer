@@ -1,5 +1,4 @@
 #include "D3D12Utils.h"
-#include <string>
 #include <comdef.h>
 
 
@@ -11,7 +10,7 @@ DxException::DxException(HRESULT hr, const std::wstring& functionName, const std
 {
 }
 
-std::wstring DxException::ToString()const
+std::wstring DxException::ToString() const
 {
     // Get the string description of the error code.
     _com_error err(ErrorCode);

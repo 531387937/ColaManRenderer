@@ -36,10 +36,9 @@ int CBoundingBox::GetWidestAxis() const
 
     if (V.x > V.y && V.x > V.z)
         return 0;
-    else if (V.y > V.z)
+    if (V.y > V.z)
         return 1;
-    else
-        return 2;
+    return 2;
 }
 
 float CBoundingBox::GetMaxWidth() const
@@ -48,10 +47,9 @@ float CBoundingBox::GetMaxWidth() const
 
     if (V.x > V.y && V.x > V.z)
         return V.x;
-    else if (V.y > V.z)
+    if (V.y > V.z)
         return V.y;
-    else
-        return V.z;
+    return V.z;
 }
 
 float CBoundingBox::GetSurfaceArea() const
@@ -62,10 +60,7 @@ float CBoundingBox::GetSurfaceArea() const
 
         return 2.0f * (V.x * V.y + V.x * V.z + V.y * V.z);
     }
-    else
-    {
-        return 0.0f;
-    }
+    return 0.0f;
 }
 
 CBoundingBox CBoundingBox::Union(const CBoundingBox& BoxA, const CBoundingBox& BoxB)

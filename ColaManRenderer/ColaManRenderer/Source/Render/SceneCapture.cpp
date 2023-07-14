@@ -1,15 +1,16 @@
 ﻿#include "SceneCapture.h"
 
-CSceneCapture2D::CSceneCapture2D(bool depthStencil, UINT width, UINT height, DXGI_FORMAT format, CD3D12RHI* d3d12RHI):Height(height),
-Width(width),D3D12RHI(d3d12RHI)
+CSceneCapture2D::CSceneCapture2D(bool depthStencil, UINT width, UINT height, DXGI_FORMAT format, CD3D12RHI* d3d12RHI):
+    D3D12RHI(d3d12RHI),
+    Width(width), Height(height)
 {
-    RT = std::make_unique<CRenderTarget2D>(d3d12RHI,depthStencil,width,height,format);
+    RT = std::make_unique<CRenderTarget2D>(d3d12RHI, depthStencil, width, height, format);
 
     SetViewportAndScissorRect();
 }
 
 void CSceneCapture2D::CreatePerspectiveView(const SVector3& eye, const SVector3& target, const SVector3& up, float fov,
-    float aspectRatio, float nearPlane, float farPlane)
+                                            float aspectRatio, float nearPlane, float farPlane)
 {
     SceneView.EyePos = eye;
     SceneView.View = SMatrix::CreateLookAt(eye, target, up);
@@ -20,7 +21,7 @@ void CSceneCapture2D::CreatePerspectiveView(const SVector3& eye, const SVector3&
 }
 
 void CSceneCapture2D::CreateOrthographicView(const SVector3& eye, const SVector3 target, const SVector3& up, float left,
-    float right, float bottom, float top, float nearPlane, float farPlane)
+                                             float right, float bottom, float top, float nearPlane, float farPlane)
 {
     SceneView.EyePos = eye;
     SceneView.View = SMatrix::CreateLookAt(eye, target, up);
@@ -32,12 +33,13 @@ void CSceneCapture2D::CreateOrthographicView(const SVector3& eye, const SVector3
 
 void CSceneCapture2D::SetViewportAndScissorRect()
 {
-    Viewport = {0.0f,0.0f,(float)Width,(float)Height,0.0f,1.0f};
+    Viewport = {0.0f, 0.0f, static_cast<float>(Width), static_cast<float>(Height), 0.0f, 1.0f};
 
-    ScissorRect = {0,0,(int)(Viewport.Width),(int)(Viewport.Height)};
+    ScissorRect = {0, 0, static_cast<int>(Viewport.Width), static_cast<int>(Viewport.Height)};
 }
 
-CSceneCaptureCube::CSceneCaptureCube(bool depthStencil, UINT size, DXGI_FORMAT format, CD3D12RHI* d3d12RHI):D3D12RHI(d3d12RHI), CubeMapSize(size)
+CSceneCaptureCube::CSceneCaptureCube(bool depthStencil, UINT size, DXGI_FORMAT format,
+                                     CD3D12RHI* d3d12RHI): D3D12RHI(d3d12RHI), CubeMapSize(size)
 {
     D3D12RHI = d3d12RHI;
 
@@ -50,22 +52,22 @@ void CSceneCaptureCube::CreatePerspectiveViews(const SVector3& eye, float nearPl
 {
     SVector3 Targets[6] =
     {
-        eye + SVector3(1.0f,  0.0f,  0.0f), // +X 
-        eye + SVector3(-1.0f, 0.0f,  0.0f), // -X 
-        eye + SVector3(0.0f,  1.0f,  0.0f), // +Y 
-        eye + SVector3(0.0f,  -1.0f, 0.0f), // -Y 
-        eye + SVector3(0.0f,  0.0f,  1.0f), // +Z 
-        eye + SVector3(0.0f,  0.0f, -1.0f)  // -Z 
+        eye + SVector3(1.0f, 0.0f, 0.0f), // +X 
+        eye + SVector3(-1.0f, 0.0f, 0.0f), // -X 
+        eye + SVector3(0.0f, 1.0f, 0.0f), // +Y 
+        eye + SVector3(0.0f, -1.0f, 0.0f), // -Y 
+        eye + SVector3(0.0f, 0.0f, 1.0f), // +Z 
+        eye + SVector3(0.0f, 0.0f, -1.0f) // -Z 
     };
 
     SVector3 Ups[6] =
     {
-        {0.0f, 1.0f, 0.0f},  // +X 
-        {0.0f, 1.0f, 0.0f},  // -X 
+        {0.0f, 1.0f, 0.0f}, // +X 
+        {0.0f, 1.0f, 0.0f}, // -X 
         {0.0f, 0.0f, -1.0f}, // +Y 
         {0.0f, 0.0f, +1.0f}, // -Y 
-        {0.0f, 1.0f, 0.0f},	 // +Z 
-        {0.0f, 1.0f, 0.0f}	 // -Z 
+        {0.0f, 1.0f, 0.0f}, // +Z 
+        {0.0f, 1.0f, 0.0f} // -Z 
     };
 
     for (int i = 0; i < 6; ++i)
@@ -84,7 +86,7 @@ void CSceneCaptureCube::CreatePerspectiveViews(const SVector3& eye, float nearPl
 
 void CSceneCaptureCube::SetViewportAndScissorRect(UINT cubeMapSize)
 {
-    Viewport = { 0.0f, 0.0f, (float)cubeMapSize, (float)cubeMapSize, 0.0f, 1.0f };
+    Viewport = {0.0f, 0.0f, static_cast<float>(cubeMapSize), static_cast<float>(cubeMapSize), 0.0f, 1.0f};
 
-    ScissorRect = { 0, 0, (int)(Viewport.Width), (int)(Viewport.Height) };
+    ScissorRect = {0, 0, static_cast<int>(Viewport.Width), static_cast<int>(Viewport.Height)};
 }

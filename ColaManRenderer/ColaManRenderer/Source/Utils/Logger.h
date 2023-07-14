@@ -6,8 +6,8 @@
 class TLogger
 {
 public:
-	static void LogToOutput(char* Text)
-	{
-		OutputDebugStringA(Text);
-	}
+    static void LogToOutput(char* Text)
+    {
+        OutputDebugStringA(Text);
+    }
 };
